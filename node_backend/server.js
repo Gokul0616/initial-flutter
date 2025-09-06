@@ -11,6 +11,7 @@ const userRoutes = require('./routes/users');
 const videoRoutes = require('./routes/videos');
 const commentRoutes = require('./routes/comments');
 const messageRoutes = require('./routes/messages');
+const storyRoutes = require('./routes/stories');
 
 const app = express();
 const server = http.createServer(app);
