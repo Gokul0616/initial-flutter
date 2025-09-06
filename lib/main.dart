@@ -47,6 +47,7 @@ class TikTokCloneApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => CommentProvider()),
         ChangeNotifierProvider(create: (_) => SocketProvider()),
+        ChangeNotifierProvider(create: (_) => StoryProvider()),
       ],
       child: Consumer<AuthProvider>(
         builder: (context, authProvider, child) {
