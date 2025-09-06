@@ -86,6 +86,41 @@ io.on('connection', (socket) => {
     }
   });
 
+  // Message reactions
+  socket.on('message_reaction', (data) => {
+    const recipientSocketId = activeUsers.get(data.recipientId);
+    if (recipientSocketId) {
+      io.to(recipientSocketId).emit('message_reaction', data);
+    }
+  });
+
+  // Message deleted
+  socket.on('message_deleted', (data) => {
+    const recipientSocketId = activeUsers.get(data.recipientId);
+    if (recipientSocketId) {
+      io.to(recipientSocketId).emit('message_deleted', data);
+    }
+  });
+
+  // Story events
+  socket.on('new_story', (data) => {
+    socket.broadcast.emit('new_story', data);
+  });
+
+  socket.on('story_viewed', (data) => {
+    const creatorSocketId = activeUsers.get(data.creatorId);
+    if (creatorSocketId) {
+      io.to(creatorSocketId).emit('story_viewed', data);
+    }
+  });
+
+  socket.on('story_reaction', (data) => {
+    const creatorSocketId = activeUsers.get(data.creatorId);
+    if (creatorSocketId) {
+      io.to(creatorSocketId).emit('story_reaction', data);
+    }
+  });
+
   // Live notifications
   socket.on('send_notification', (data) => {
     const targetSocketId = activeUsers.get(data.targetUserId);
