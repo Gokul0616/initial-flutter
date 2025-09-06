@@ -47,11 +47,11 @@ const userSchema = new mongoose.Schema({
     default: ''
   },
   followers: [{
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: 'User'
   }],
   following: [{
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: 'User'
   }],
   followersCount: {
