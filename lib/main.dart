@@ -8,6 +8,7 @@ import 'providers/video_provider.dart';
 import 'providers/user_provider.dart';
 import 'providers/comment_provider.dart';
 import 'providers/socket_provider.dart';
+import 'providers/story_provider.dart';
 import 'screens/splash_screen.dart';
 import 'utils/theme.dart';
 import 'utils/constants.dart';
