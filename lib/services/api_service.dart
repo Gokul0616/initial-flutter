@@ -246,6 +246,6 @@ class ApiService {
 
   // Cancel all requests
   void cancelRequests() {
-    _dio.clear();
+    _dio.close();
   }
 }
