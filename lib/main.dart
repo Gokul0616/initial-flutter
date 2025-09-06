@@ -9,6 +9,7 @@ import 'providers/user_provider.dart';
 import 'providers/comment_provider.dart';
 import 'providers/socket_provider.dart';
 import 'providers/story_provider.dart';
+import 'providers/message_provider.dart';
 import 'screens/splash_screen.dart';
 import 'utils/theme.dart';
 import 'utils/constants.dart';
@@ -48,6 +49,7 @@ class TikTokCloneApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CommentProvider()),
         ChangeNotifierProvider(create: (_) => SocketProvider()),
         ChangeNotifierProvider(create: (_) => StoryProvider()),
+        ChangeNotifierProvider(create: (_) => MessageProvider()),
       ],
       child: Consumer<AuthProvider>(
         builder: (context, authProvider, child) {

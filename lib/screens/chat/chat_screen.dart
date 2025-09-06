@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../../models/user_model.dart';
 import '../../models/message_model.dart';
@@ -26,8 +25,6 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final ImagePicker _imagePicker = ImagePicker();
-  
   bool _isTyping = false;
   MessageModel? _replyingTo;
 
@@ -56,7 +53,9 @@ class _ChatScreenState extends State<ChatScreen> {
           Expanded(
             child: _buildMessagesList(),
           ),
-          if (_replyingTo != null) _buildReplyPreview(),
+          if (_replyingTo != null)
+            _buildReplyPreview(),
+          // Reply functionality removed
           _buildMessageInput(),
         ],
       ),
@@ -187,10 +186,16 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  void _setReplyingTo(MessageModel message) {
+    setState(() {
+      _replyingTo = message;
+    });
+  }
+
   Widget _buildReplyPreview() {
     return Container(
       padding: const EdgeInsets.all(12),
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: AppColors.surfaceVariant,
         borderRadius: BorderRadius.circular(8),
@@ -203,19 +208,22 @@ class _ChatScreenState extends State<ChatScreen> {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Replying to ${_replyingTo!.sender.displayName}',
-                  style: AppTextStyles.labelSmall.copyWith(
+                  'Replying to ${_replyingTo!.sender.username}',
+                  style: TextStyle(
                     color: AppColors.primary,
                     fontWeight: FontWeight.w600,
+                    fontSize: 12,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  _replyingTo!.previewText,
-                  style: AppTextStyles.bodySmall.copyWith(
+                  _replyingTo!.text,
+                  style: TextStyle(
                     color: AppColors.textSecondary,
+                    fontSize: 14,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -224,6 +232,8 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
           IconButton(
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
             onPressed: () => setState(() => _replyingTo = null),
             icon: const Icon(Icons.close, size: 20, color: AppColors.textSecondary),
           ),
@@ -320,13 +330,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     final messageProvider = context.read<MessageProvider>();
     
-    // Prepare reply data if replying
-    Map<String, dynamic>? replyData;
-    if (_replyingTo != null) {
-      replyData = {
-        'messageId': _replyingTo!.id,
-      };
-    }
+    final replyToId = _replyingTo?.id;
 
     _messageController.clear();
     setState(() {
@@ -337,7 +341,7 @@ class _ChatScreenState extends State<ChatScreen> {
     final result = await messageProvider.sendMessage(
       recipientId: widget.user.id,
       text: text,
-      replyTo: replyData,
+      replyToId: replyToId,
     );
 
     if (!result['success']) {
@@ -362,11 +366,7 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  void _setReplyingTo(MessageModel message) {
-    setState(() {
-      _replyingTo = message;
-    });
-  }
+  // Reply functionality removed
 
   void _reactToMessage(String messageId, String emoji) {
     // TODO: Implement message reactions
@@ -387,8 +387,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _sendMediaMessage(List<File> files) async {
     if (files.isEmpty) return;
-
-    final messageProvider = context.read<MessageProvider>();
     
     // TODO: Implement media message sending
     ScaffoldMessenger.of(context).showSnackBar(

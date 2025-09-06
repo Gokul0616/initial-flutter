@@ -293,7 +293,7 @@ class _StoryViewerScreenState extends State<StoryViewerScreen> {
                       ],
                     ),
                     Text(
-                      story.timeRemaining.isEmpty ? story.timeAgo : story.timeRemaining,
+                      story.createdAt.toString(),
                       style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 12,

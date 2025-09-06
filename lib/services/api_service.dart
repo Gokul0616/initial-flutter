@@ -32,7 +32,7 @@ class ApiService {
         onRequest: (options, handler) {
           // Add auth token to requests
           if (_authToken != null) {
-            options.headers['Authorization'] = 'Bearer $_authToken';
+            options.headers['Authorization'] = 'Bearer ${_authToken!.trim()}';
           }
           
           if (kDebugMode) {

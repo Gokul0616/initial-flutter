@@ -3,12 +3,7 @@ description: A TikTok clone built with Flutter featuring video sharing, real-tim
 publish_to: 'none'
 version: 1.0.0+1
 
-# The following section is specific to Flutter packages.
-flutter:
-  assets:
-    - assets/animations/loading.json
-    - assets/animations/success.json
-    - assets/animations/error.json
+
 
 environment:
   sdk: '>=3.0.0 <4.0.0'

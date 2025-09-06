@@ -190,10 +190,10 @@ class _MessagesScreenState extends State<MessagesScreen> {
                       child: Container(
                         width: 12,
                         height: 12,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: AppColors.primary,
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.surface, width: 2),
+                          border: Border.all(color: AppColors.surface, width: 2.0),
                         ),
                       ),
                     ),

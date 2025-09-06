@@ -132,10 +132,10 @@ class _StoriesBarState extends State<StoriesBar> {
                     child: Container(
                       width: 20,
                       height: 20,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: AppColors.primary,
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.surface, width: 2),
+                        border: Border.all(color: AppColors.surface, width: 2.0),
                       ),
                       child: const Icon(
                         Icons.add,

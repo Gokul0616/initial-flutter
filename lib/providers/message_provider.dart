@@ -111,6 +111,7 @@ class MessageProvider extends ChangeNotifier {
   Future<Map<String, dynamic>> sendMessage({
     required String recipientId,
     required String text,
+    String? replyToId,
   }) async {
     if (text.trim().isEmpty) {
       return {'success': false, 'error': 'Message cannot be empty'};

@@ -3,9 +3,11 @@ const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 
 const userSchema = new mongoose.Schema({
-  _id: {
+  userId: {
     type: String,
-    default: uuidv4
+    default: uuidv4,
+    unique: true,
+    required: true
   },
   username: {
     type: String,
@@ -107,7 +109,7 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
 // Generate user profile response
 userSchema.methods.toProfileJSON = function() {
   return {
-    id: this._id,
+    id: this.userId,
     username: this.username,
     displayName: this.displayName,
     bio: this.bio,

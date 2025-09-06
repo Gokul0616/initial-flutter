@@ -6,8 +6,15 @@ const { auth } = require('../middleware/auth');
 const router = express.Router();
 
 // Generate JWT token
-const generateToken = (userId) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '30d' });
+const generateToken = (user) => {
+  return jwt.sign(
+    { 
+      userId: user.userId,
+      _id: user._id 
+    }, 
+    process.env.JWT_SECRET, 
+    { expiresIn: '30d' }
+  );
 };
 
 // Register new user
@@ -45,7 +52,7 @@ router.post('/register', async (req, res) => {
 
     await user.save();
 
-    const token = generateToken(user._id);
+    const token = generateToken(user);
 
     res.status(201).json({
       message: 'User registered successfully',
@@ -88,7 +95,7 @@ router.post('/login', async (req, res) => {
     user.lastActive = new Date();
     await user.save();
 
-    const token = generateToken(user._id);
+    const token = generateToken(user);
 
     res.json({
       message: 'Login successful',
