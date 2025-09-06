@@ -1,0 +1,29 @@
+{
+  "name": "tiktok-clone-backend",
+  "version": "1.0.0",
+  "description": "TikTok Clone Backend with Node.js, Express, Socket.io and MongoDB",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^8.0.3",
+    "socket.io": "^4.7.4",
+    "cors": "^2.8.5",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "multer": "^1.4.5-lts.1",
+    "dotenv": "^16.3.1",
+    "uuid": "^9.0.1",
+    "fs-extra": "^11.2.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "keywords": ["tiktok", "clone", "nodejs", "express", "socket.io", "mongodb"],
+  "author": "TikTok Clone Developer",
+  "license": "MIT"
+}

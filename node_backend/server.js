@@ -1,0 +1,109 @@
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const path = require('path');
+require('dotenv').config();
+
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
+const videoRoutes = require('./routes/videos');
+const commentRoutes = require('./routes/comments');
+
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
+
+// Middleware
+app.use(cors());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Database connection
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('✅ Connected to MongoDB'))
+.catch(err => console.error('❌ MongoDB connection error:', err));
+
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/videos', videoRoutes);
+app.use('/api/comments', commentRoutes);
+
+// Socket.io for real-time features
+const activeUsers = new Map();
+
+io.on('connection', (socket) => {
+  console.log('👤 User connected:', socket.id);
+
+  // User joins with their ID
+  socket.on('join', (userId) => {
+    activeUsers.set(userId, socket.id);
+    socket.userId = userId;
+    console.log(`User ${userId} joined with socket ${socket.id}`);
+  });
+
+  // Real-time comments
+  socket.on('new_comment', (data) => {
+    socket.broadcast.emit('comment_added', data);
+  });
+
+  // Real-time likes
+  socket.on('video_liked', (data) => {
+    socket.broadcast.emit('like_updated', data);
+  });
+
+  // Real-time follows
+  socket.on('user_followed', (data) => {
+    const targetSocketId = activeUsers.get(data.targetUserId);
+    if (targetSocketId) {
+      io.to(targetSocketId).emit('new_follower', data);
+    }
+  });
+
+  // Private messaging
+  socket.on('send_message', (data) => {
+    const recipientSocketId = activeUsers.get(data.recipientId);
+    if (recipientSocketId) {
+      io.to(recipientSocketId).emit('new_message', data);
+    }
+  });
+
+  // Live notifications
+  socket.on('send_notification', (data) => {
+    const targetSocketId = activeUsers.get(data.targetUserId);
+    if (targetSocketId) {
+      io.to(targetSocketId).emit('notification', data);
+    }
+  });
+
+  socket.on('disconnect', () => {
+    if (socket.userId) {
+      activeUsers.delete(socket.userId);
+    }
+    console.log('👤 User disconnected:', socket.id);
+  });
+});
+
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', message: 'TikTok Clone API is running!' });
+});
+
+const PORT = process.env.PORT || 3001;
+server.listen(PORT, () => {
+  console.log(`🚀 TikTok Clone Server running on port ${PORT}`);
+  console.log(`📱 API available at http://localhost:${PORT}/api`);
+});
+
+module.exports = { app, io };
