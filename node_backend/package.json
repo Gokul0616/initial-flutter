@@ -8,22 +8,29 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "mongoose": "^8.0.3",
-    "socket.io": "^4.7.4",
-    "cors": "^2.8.5",
-    "jsonwebtoken": "^9.0.2",
     "bcryptjs": "^2.4.3",
-    "multer": "^1.4.5-lts.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "uuid": "^9.0.1",
+    "express": "^4.18.2",
     "fs-extra": "^11.2.0",
-    "path": "^0.12.7"
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.3",
+    "multer": "^1.4.5-lts.1",
+    "path": "^0.12.7",
+    "socket.io": "^4.7.4",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
   },
-  "keywords": ["tiktok", "clone", "nodejs", "express", "socket.io", "mongodb"],
+  "keywords": [
+    "tiktok",
+    "clone",
+    "nodejs",
+    "express",
+    "socket.io",
+    "mongodb"
+  ],
   "author": "TikTok Clone Developer",
   "license": "MIT"
 }
