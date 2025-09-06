@@ -10,6 +10,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const videoRoutes = require('./routes/videos');
 const commentRoutes = require('./routes/comments');
+const messageRoutes = require('./routes/messages');
 
 const app = express();
 const server = http.createServer(app);
@@ -26,6 +27,9 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Make io available to routes
+app.set('io', io);
+
 // Database connection
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -39,6 +43,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/videos', videoRoutes);
 app.use('/api/comments', commentRoutes);
+app.use('/api/messages', messageRoutes);
 
 // Socket.io for real-time features
 const activeUsers = new Map();
@@ -87,6 +92,27 @@ io.on('connection', (socket) => {
     }
   });
 
+  // Typing indicators
+  socket.on('typing_start', (data) => {
+    const recipientSocketId = activeUsers.get(data.recipientId);
+    if (recipientSocketId) {
+      io.to(recipientSocketId).emit('user_typing', {
+        userId: socket.userId,
+        isTyping: true
+      });
+    }
+  });
+
+  socket.on('typing_stop', (data) => {
+    const recipientSocketId = activeUsers.get(data.recipientId);
+    if (recipientSocketId) {
+      io.to(recipientSocketId).emit('user_typing', {
+        userId: socket.userId,
+        isTyping: false
+      });
+    }
+  });
+
   socket.on('disconnect', () => {
     if (socket.userId) {
       activeUsers.delete(socket.userId);
@@ -100,10 +126,22 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'TikTok Clone API is running!' });
 });
 
+// Error handling middleware
+app.use((error, req, res, next) => {
+  console.error('Server Error:', error);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
+// 404 handler
+app.use('*', (req, res) => {
+  res.status(404).json({ error: 'Route not found' });
+});
+
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
   console.log(`🚀 TikTok Clone Server running on port ${PORT}`);
   console.log(`📱 API available at http://localhost:${PORT}/api`);
+  console.log(`🔌 Socket.IO server running`);
 });
 
 module.exports = { app, io };
