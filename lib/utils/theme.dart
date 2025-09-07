@@ -85,7 +85,11 @@ class AppColors {
   static const Color surfaceVariant = Color(0xFF2A2A2A); // Slightly lighter than surface
   static const Color textPrimary = textPrimaryDarkClassic;
   static const Color textSecondary = textSecondaryDarkClassic;
+  static const Color textTertiary = Color(0xFF808080); // Tertiary text color
   static const Color border = borderDark;
+
+  // Gradient colors
+  static const Color primaryGradient = primaryClassic;
 
   // Card colors
   static const Color cardDark = Color(0xFF1E1E1E);
