@@ -238,7 +238,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                     const SizedBox(width: 8),
                     const Icon(
                       Icons.verified,
-                      color: AppColors.primary,
+                      color: Colors.blue,
                       size: 20,
                     ),
                   ],
