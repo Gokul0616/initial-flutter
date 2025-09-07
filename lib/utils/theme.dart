@@ -71,6 +71,7 @@ class AppColors {
   static const Color error = Color(0xFFDC3545);
   static const Color info = Color(0xFF17A2B8);
   static const Color like = Color(0xFFFF1744); // Like/heart color
+  static const Color accent = Color(0xFFFFD700); // Gold accent color
 
   // Border Colors
   static const Color borderDark = Color(0xFF333333);
