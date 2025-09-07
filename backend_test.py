@@ -27,25 +27,25 @@ INVALID_THEMES = [
     'green', 'orange', 'blue', '', None, 123, True
 ]
 
-# Test data
+# Test data for theme testing
 TEST_USERS = [
     {
-        "username": "sarah_johnson",
-        "email": "sarah.johnson@example.com", 
-        "password": "SecurePass123",
-        "displayName": "Sarah Johnson"
+        "username": "theme_user_alice",
+        "email": "alice.theme@example.com", 
+        "password": "ThemeTest123",
+        "displayName": "Alice Theme Tester"
     },
     {
-        "username": "mike_chen",
-        "email": "mike.chen@example.com",
-        "password": "SecurePass456", 
-        "displayName": "Mike Chen"
+        "username": "theme_user_bob",
+        "email": "bob.theme@example.com",
+        "password": "ThemeTest456", 
+        "displayName": "Bob Theme Tester"
     },
     {
-        "username": "emma_davis",
-        "email": "emma.davis@example.com",
-        "password": "SecurePass789",
-        "displayName": "Emma Davis"
+        "username": "theme_user_carol",
+        "email": "carol.theme@example.com",
+        "password": "ThemeTest789",
+        "displayName": "Carol Theme Tester"
     }
 ]
 
