@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../services/theme_service.dart';
 
 enum AppThemeType {
   darkClassic,
@@ -47,6 +48,22 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   Future<void> _loadTheme() async {
+    // First try to load from backend if user is authenticated
+    try {
+      final backendTheme = await ThemeService.getUserTheme();
+      if (backendTheme != null) {
+        _currentTheme = backendTheme;
+        // Also save to local storage
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setInt(_themeKey, backendTheme.index);
+        notifyListeners();
+        return;
+      }
+    } catch (e) {
+      print('Could not load theme from backend: $e');
+    }
+    
+    // Fallback to local storage
     final prefs = await SharedPreferences.getInstance();
     final themeIndex = prefs.getInt(_themeKey) ?? 0;
     if (themeIndex < AppThemeType.values.length) {
@@ -57,8 +74,18 @@ class ThemeProvider extends ChangeNotifier {
 
   Future<void> setTheme(AppThemeType theme) async {
     _currentTheme = theme;
+    
+    // Save to local storage first
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_themeKey, theme.index);
+    
+    // Try to sync with backend
+    try {
+      await ThemeService.updateUserTheme(theme);
+    } catch (e) {
+      print('Could not sync theme with backend: $e');
+    }
+    
     notifyListeners();
   }
 
@@ -94,4 +121,20 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   List<AppThemeType> get availableThemes => AppThemeType.values;
+  
+  // Method to refresh theme from backend (useful after login)
+  Future<void> refreshThemeFromBackend() async {
+    try {
+      final backendTheme = await ThemeService.getUserTheme();
+      if (backendTheme != null && backendTheme != _currentTheme) {
+        _currentTheme = backendTheme;
+        // Also save to local storage
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setInt(_themeKey, backendTheme.index);
+        notifyListeners();
+      }
+    } catch (e) {
+      print('Could not refresh theme from backend: $e');
+    }
+  }
 }
