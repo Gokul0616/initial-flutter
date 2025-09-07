@@ -70,20 +70,21 @@ class AppColors {
   static const Color warning = Color(0xFFFFC107);
   static const Color error = Color(0xFFDC3545);
   static const Color info = Color(0xFF17A2B8);
+  static const Color like = Color(0xFFFF1744); // Like/heart color
 
   // Border Colors
   static const Color borderDark = Color(0xFF333333);
   static const Color borderLight = Color(0xFFDEE2E6);
 
-  // Legacy colors for backward compatibility (will be dynamic based on theme)
-  static Color primary = primaryClassic;
-  static Color secondary = secondaryClassic;
-  static Color background = backgroundDarkClassic;
-  static Color surface = surfaceDarkClassic;
-  static Color surfaceVariant = surfaceDarkClassic;
-  static Color textPrimary = textPrimaryDarkClassic;
-  static Color textSecondary = textSecondaryDarkClassic;
-  static Color border = borderDark;
+  // Legacy colors for backward compatibility - now const
+  static const Color primary = primaryClassic;
+  static const Color secondary = secondaryClassic;
+  static const Color background = backgroundDarkClassic;
+  static const Color surface = surfaceDarkClassic;
+  static const Color surfaceVariant = Color(0xFF2A2A2A); // Slightly lighter than surface
+  static const Color textPrimary = textPrimaryDarkClassic;
+  static const Color textSecondary = textSecondaryDarkClassic;
+  static const Color border = borderDark;
 
   // Card colors
   static const Color cardDark = Color(0xFF1E1E1E);
