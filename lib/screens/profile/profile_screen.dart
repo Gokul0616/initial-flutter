@@ -120,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen>
               color: context.primarySurface,
               child: TabBar(
                 controller: _tabController,
-                indicatorColor: AppColors.primary,
+                indicatorColor: context.colorScheme.primary,
                 labelColor: context.primaryText,
                 unselectedLabelColor: context.secondaryText,
                 tabs: const [
