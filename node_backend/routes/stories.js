@@ -41,6 +41,45 @@ const upload = multer({
   }
 });
 
+// Get public stories (no auth required for testing)
+router.get('/public', async (req, res) => {
+  try {
+    const stories = await Story.find({
+      privacy: 'public',
+      isDeleted: false,
+      $or: [
+        { expiresAt: { $gt: new Date() } },
+        { isHighlight: true }
+      ]
+    })
+    .populate('creator', 'username displayName profilePicture isVerified')
+    .sort({ createdAt: -1 })
+    .limit(20);
+
+    const storyGroups = {};
+    stories.forEach(story => {
+      const creatorId = story.creator._id.toString();
+      if (!storyGroups[creatorId]) {
+        storyGroups[creatorId] = {
+          user: story.creator,
+          stories: [],
+          hasUnviewed: true,
+          latestStory: story.createdAt
+        };
+      }
+      storyGroups[creatorId].stories.push(story.toStoryJSON());
+    });
+
+    res.json({
+      storyGroups: Object.values(storyGroups)
+    });
+
+  } catch (error) {
+    console.error('Get public stories error:', error);
+    res.status(500).json({ error: 'Server error fetching stories' });
+  }
+});
+
 // Create new story
 router.post('/create', auth, upload.single('media'), async (req, res) => {
   try {
