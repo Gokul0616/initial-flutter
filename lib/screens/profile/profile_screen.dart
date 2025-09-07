@@ -45,14 +45,14 @@ class _ProfileScreenState extends State<ProfileScreen>
     
     if (widget.userId == null) {
       // Current user profile
-      _user = authProvider.currentUser;
+      _user = authProvider.user;
       _isCurrentUser = true;
     } else {
       // Other user profile
-      _user = await userProvider.getUserById(widget.userId!);
-      _isCurrentUser = _user?.id == authProvider.currentUser?.id;
+      _user = await userProvider.getUserProfile(widget.userId!);
+      _isCurrentUser = _user?.id == authProvider.user?.id;
       if (!_isCurrentUser && _user != null) {
-        _isFollowing = authProvider.currentUser?.following.contains(_user!.id) ?? false;
+        _isFollowing = authProvider.user?.following.contains(_user!.id) ?? false;
       }
     }
     
@@ -509,8 +509,15 @@ class _ProfileScreenState extends State<ProfileScreen>
   Future<void> _toggleFollow() async {
     if (_user == null) return;
     
+    final currentUser = context.read<AuthProvider>().user;
+    if (currentUser == null) {
+      // Show sign in dialog or navigate to login
+      return;
+    }
+    
+    final wasFollowing = _user!.isFollowedBy(currentUser.id);
     setState(() {
-      _isFollowing = !_isFollowing;
+      _isFollowing = !wasFollowing;
       if (_isFollowing) {
         _user = _user!.copyWith(followersCount: _user!.followersCount + 1);
       } else {
@@ -520,11 +527,7 @@ class _ProfileScreenState extends State<ProfileScreen>
 
     try {
       final userProvider = context.read<UserProvider>();
-      if (_isFollowing) {
-        await userProvider.followUser(_user!.id);
-      } else {
-        await userProvider.unfollowUser(_user!.id);
-      }
+      await userProvider.toggleFollow(currentUser.id, _user!.id);
     } catch (e) {
       // Revert on error
       setState(() {

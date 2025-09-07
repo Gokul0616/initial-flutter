@@ -15,7 +15,8 @@ class UserAvatar extends StatelessWidget {
     required this.imageUrl,
     this.size = 48,
     this.showBorder = false,
-    this.borderColor = AppColors.primary,
+    this.borderColor = AppColors.primaryClassic, // Using AppColors.primaryClassic
+    // this.borderColor = const Color(0xFFFF0050), // Using AppColors.primaryClassic
     this.borderWidth = 2,
     this.onTap,
   });

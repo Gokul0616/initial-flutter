@@ -32,7 +32,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Messages', style: AppTextStyles.headline4),
+        title: Text('Messages', style: AppTextStyles.headline4),
         backgroundColor: AppColors.surface,
         elevation: 0,
         automaticallyImplyLeading: false,
@@ -96,28 +96,28 @@ class _MessagesScreenState extends State<MessagesScreen> {
         final isLoading = messageProvider.conversationsLoading;
 
         if (isLoading && conversations.isEmpty) {
-          return const Center(
+          return  Center(
             child: CircularProgressIndicator(color: AppColors.primary),
           );
         }
 
         if (conversations.isEmpty) {
-          return const Center(
+          return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
+                const Icon(
                   Icons.message_outlined,
                   size: 64,
                   color: AppColors.textSecondary,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   'No messages yet',
                   style: AppTextStyles.headline5,
                 ),
-                SizedBox(height: 8),
-                Text(
+                const SizedBox(height: 8),
+                const Text(
                   'Start connecting with creators!',
                   style: TextStyle(color: AppColors.textSecondary),
                 ),
@@ -221,7 +221,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                               ),
                               if (conversation.user.isVerified) ...[
                                 const SizedBox(width: 4),
-                                const Icon(
+                                 Icon(
                                   Icons.verified,
                                   color: AppColors.primary,
                                   size: 14,
@@ -243,7 +243,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                               const SizedBox(width: 8),
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   color: AppColors.primary,
                                   shape: BoxShape.circle,
                                 ),
@@ -367,7 +367,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
+              Text(
                 'New Message',
                 style: AppTextStyles.headline5,
               ),

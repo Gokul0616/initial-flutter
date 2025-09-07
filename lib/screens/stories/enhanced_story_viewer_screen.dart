@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tiktok_clone/models/user_model.dart';
 import 'package:video_player/video_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../models/story_model.dart';
@@ -185,10 +186,10 @@ class _EnhancedStoryViewerScreenState extends State<EnhancedStoryViewerScreen>
     final currentStory = _getCurrentStory();
     if (currentStory != null) {
       final authProvider = context.read<AuthProvider>();
-      if (authProvider.currentUser != null) {
+      if (authProvider.user != null) {
         context.read<StoryProvider>().viewStory(
           currentStory.id,
-          authProvider.currentUser!.id,
+          authProvider.user!.id,
         );
       }
     }
@@ -207,7 +208,7 @@ class _EnhancedStoryViewerScreenState extends State<EnhancedStoryViewerScreen>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
+             Text(
               'React to this story',
               style: AppTextStyles.titleMedium,
             ),
@@ -278,7 +279,7 @@ class _EnhancedStoryViewerScreenState extends State<EnhancedStoryViewerScreen>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
+               Text(
                 'Reply to this story',
                 style: AppTextStyles.titleMedium,
               ),
@@ -303,9 +304,9 @@ class _EnhancedStoryViewerScreenState extends State<EnhancedStoryViewerScreen>
                   ),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        _replyToStory();
+                      onPressed: () async {
                         Navigator.pop(context);
+                        await _replyToStory();
                       },
                       child: const Text('Send'),
                     ),
@@ -319,15 +320,28 @@ class _EnhancedStoryViewerScreenState extends State<EnhancedStoryViewerScreen>
     );
   }
 
-  void _replyToStory() {
+  Future<void> _replyToStory() async {
     if (_replyController.text.trim().isEmpty) return;
     
     final currentStory = _getCurrentStory();
     if (currentStory != null) {
-      context.read<StoryProvider>().replyToStory(
+      final success = await context.read<StoryProvider>().replyToStory(
         currentStory.id,
         _replyController.text.trim(),
       );
+      
+      if (success && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Reply sent successfully')),
+        );
+      } else if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to send reply. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
       _replyController.clear();
     }
   }
@@ -591,7 +605,7 @@ class _EnhancedStoryViewerScreenState extends State<EnhancedStoryViewerScreen>
                     ),
                     if (user.isVerified) ...[
                       const SizedBox(width: 4),
-                      const Icon(
+                       Icon(
                         Icons.verified,
                         color: AppColors.primary,
                         size: 16,
@@ -642,7 +656,7 @@ class _EnhancedStoryViewerScreenState extends State<EnhancedStoryViewerScreen>
 
   Widget _buildBottomActions(StoryModel story) {
     final authProvider = context.read<AuthProvider>();
-    final isOwnStory = story.creator.id == authProvider.currentUser?.id;
+    final isOwnStory = story.creator.id == authProvider.user?.id;
     
     return Positioned(
       bottom: 40,

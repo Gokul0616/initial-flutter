@@ -152,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen>
                                 ),
                               ),
                               const SizedBox(height: 24),
-                              const Text(
+                               Text(
                                 'Welcome Back!',
                                 style: AppTextStyles.headline1,
                               ),

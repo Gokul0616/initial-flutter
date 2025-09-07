@@ -34,7 +34,7 @@ class _StoriesBarState extends State<StoriesBar> {
         final isLoading = storyProvider.storiesLoading;
 
         if (isLoading && storyGroups.isEmpty) {
-          return const SizedBox(
+          return SizedBox(
             height: 100,
             child: Center(
               child: CircularProgressIndicator(color: AppColors.primary),
@@ -258,7 +258,7 @@ class _StoriesBarState extends State<StoriesBar> {
                     right: 0,
                     child: Container(
                       padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: AppColors.primary,
                         shape: BoxShape.circle,
                       ),

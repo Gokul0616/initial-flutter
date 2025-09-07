@@ -83,7 +83,7 @@ class _StoryCreatorScreenState extends State<StoryCreatorScreen> {
                           valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                         ),
                       )
-                    : const Text(
+                    :  Text(
                         'Share',
                         style: TextStyle(
                           color: AppColors.primary,
@@ -160,7 +160,7 @@ class _StoryCreatorScreenState extends State<StoryCreatorScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('Background', style: AppTextStyles.labelMedium),
+                             Text('Background', style: AppTextStyles.labelMedium),
                             const SizedBox(height: 8),
                             SizedBox(
                               height: 40,
@@ -198,7 +198,7 @@ class _StoryCreatorScreenState extends State<StoryCreatorScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('Text Color', style: AppTextStyles.labelMedium),
+                             Text('Text Color', style: AppTextStyles.labelMedium),
                             const SizedBox(height: 8),
                             SizedBox(
                               height: 40,
@@ -309,7 +309,7 @@ class _StoryCreatorScreenState extends State<StoryCreatorScreen> {
                 // Privacy Selector
                 Row(
                   children: [
-                    const Text('Who can see this:', style: AppTextStyles.labelMedium),
+                     Text('Who can see this:', style: AppTextStyles.labelMedium),
                     const Spacer(),
                     DropdownButton<String>(
                       value: _privacy,

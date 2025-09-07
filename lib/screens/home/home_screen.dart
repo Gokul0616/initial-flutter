@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../models/video_model.dart';
 import '../../providers/video_provider.dart';
+import '../../providers/auth_provider.dart';
 import '../../utils/theme.dart';
 import '../../widgets/video_feed.dart';
 import '../../widgets/custom_tab_bar.dart';
@@ -70,12 +72,15 @@ class _HomeScreenState extends State<HomeScreen>
               ),
               
               // Following Tab
-              Consumer<VideoProvider>(
-                builder: (context, videoProvider, child) {
+              Consumer2<VideoProvider, AuthProvider>(
+                builder: (context, videoProvider, authProvider, child) {
                   // Filter videos from followed users
-                  final followingVideos = videoProvider.feedVideos
-                      .where((video) => video.user.isFollowing == true)
-                      .toList();
+                  final currentUser = authProvider.user;
+                  final followingVideos = currentUser != null 
+                      ? videoProvider.feedVideos
+                          .where((video) => video.user.isFollowedBy(currentUser.id))
+                          .toList()
+                      : <VideoModel>[];
                       
                   return VideoFeed(
                     videos: followingVideos,
@@ -83,7 +88,9 @@ class _HomeScreenState extends State<HomeScreen>
                     hasMore: false,
                     onLoadMore: () {},
                     onRefresh: () => videoProvider.loadFeedVideos(refresh: true),
-                    emptyMessage: "You're not following anyone yet.\nFind people to follow!",
+                    emptyMessage: currentUser == null 
+                        ? "Sign in to see videos from people you follow!"
+                        : "You're not following anyone yet.\nFind people to follow!",
                   );
                 },
               ),

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:lottie/lottie.dart';
 import '../providers/auth_provider.dart';
 import '../utils/theme.dart';
-import '../utils/constants.dart';
 import 'auth/login_screen.dart';
 import 'main/main_screen.dart';
 
@@ -148,18 +146,14 @@ class _SplashScreenState extends State<SplashScreen>
                       opacity: _fadeAnimation,
                       child: Column(
                         children: [
-                          ShaderMask(
-                            shaderCallback: (bounds) => AppColors.primaryGradient
-                                .createShader(bounds),
-                            child: const Text(
+                          Text(
                               'TikTok Clone',
                               style: TextStyle(
                                 fontSize: 32,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                color: AppColors.primary,
                                 letterSpacing: 1.2,
                               ),
-                            ),
                           ),
                           const SizedBox(height: 8),
                           Text(

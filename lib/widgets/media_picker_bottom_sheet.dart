@@ -33,8 +33,8 @@ class MediaPickerBottomSheet extends StatelessWidget {
           ),
           
           // Title
-          const Padding(
-            padding: EdgeInsets.all(16),
+          Padding(
+            padding: const EdgeInsets.all(16),
             child: Text(
               'Select Media',
               style: AppTextStyles.headline5,

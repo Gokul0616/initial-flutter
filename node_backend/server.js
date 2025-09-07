@@ -12,6 +12,7 @@ const videoRoutes = require('./routes/videos');
 const commentRoutes = require('./routes/comments');
 const messageRoutes = require('./routes/messages');
 const storyRoutes = require('./routes/stories');
+const addDummyData = require('./scripts/addDummyData');
 
 const app = express();
 const server = http.createServer(app);
@@ -173,7 +174,10 @@ app.use((error, req, res, next) => {
 app.use('*', (req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
-
+const  addData =async()=>{
+  await addDummyData();
+}
+addData();
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
   console.log(`🚀 TikTok Clone Server running on port ${PORT}`);

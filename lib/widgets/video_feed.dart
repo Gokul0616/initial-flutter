@@ -127,7 +127,7 @@ class _VideoFeedState extends State<VideoFeed> {
   }
 
   Widget _buildLoadingIndicator() {
-    return const Center(
+    return Center(
       child: CircularProgressIndicator(
         color: AppColors.primary,
         strokeWidth: 2,

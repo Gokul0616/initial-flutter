@@ -4,9 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../models/video_model.dart';
 import '../providers/video_provider.dart';
-import '../providers/user_provider.dart';
+import '../providers/auth_provider.dart';
 import '../utils/theme.dart';
-import '../utils/constants.dart';
 import '../screens/comments/comments_screen.dart';
 import '../screens/profile/profile_screen.dart';
 import 'user_avatar.dart';
@@ -158,7 +157,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
   void _viewProfile() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => ProfileScreen(username: widget.video.user.username),
+        builder: (context) => ProfileScreen(userId: widget.video.user.username),
       ),
     );
   }
@@ -188,7 +187,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                       ),
                     ),
                   )
-                : const Center(
+                : Center(
                     child: CircularProgressIndicator(
                       color: AppColors.primary,
                       strokeWidth: 2,
@@ -277,7 +276,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                   child: Row(
                     children: [
                       UserAvatar(
-                        imageUrl: widget.video.user.profileImageUrl,
+                        imageUrl: widget.video.user.profilePictureUrl,
                         size: 40,
                       ),
                       const SizedBox(width: 12),
@@ -295,7 +294,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                                 ),
                                 if (widget.video.user.isVerified) ...[
                                   const SizedBox(width: 4),
-                                  const Icon(
+                                  Icon(
                                     Icons.verified,
                                     color: AppColors.secondary,
                                     size: 16,
@@ -313,10 +312,15 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                         ),
                       ),
                       // Follow Button
-                      if (widget.video.user.isFollowing != true)
-                        Consumer<UserProvider>(
-                          builder: (context, userProvider, child) {
-                            return Container(
+                      Consumer<AuthProvider>(
+                        builder: (context, authProvider, child) {
+                          final currentUser = authProvider.user;
+                          if (currentUser == null || 
+                              currentUser.id == widget.video.user.id ||
+                              widget.video.user.isFollowedBy(currentUser.id)) {
+                            return const SizedBox.shrink();
+                          }
+                          return Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
                                 vertical: 6,

@@ -599,7 +599,7 @@ class MessageBubble extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text('React to message', style: AppTextStyles.headline5),
+                Text('React to message', style: AppTextStyles.headline5),
                 const SizedBox(height: 16),
                 Wrap(
                   spacing: 8,

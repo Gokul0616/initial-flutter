@@ -173,14 +173,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Edit Profile', style: AppTextStyles.headline5),
+        title: Text('Edit Profile', style: AppTextStyles.headline5),
         backgroundColor: AppColors.surface,
         elevation: 0,
         actions: [
           TextButton(
             onPressed: _isLoading ? null : _saveProfile,
             child: _isLoading
-                ? const SizedBox(
+                ?  SizedBox(
                     width: 16,
                     height: 16,
                     child: CircularProgressIndicator(
@@ -188,7 +188,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       strokeWidth: 2,
                     ),
                   )
-                : const Text(
+                :  Text(
                     'Save',
                     style: TextStyle(
                       color: AppColors.primary,
@@ -226,7 +226,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 fit: BoxFit.cover,
                               )
                             : UserAvatar(
-                                imageUrl: user.profileImageUrl,
+                                imageUrl: user.profilePictureUrl,
                                 size: 116,
                               ),
                       ),
@@ -322,7 +322,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Privacy Settings',
                       style: AppTextStyles.headline5,
                     ),
@@ -356,7 +356,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Account',
                       style: AppTextStyles.headline5,
                     ),

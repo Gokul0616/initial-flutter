@@ -186,7 +186,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                         Center(
                           child: Column(
                             children: [
-                              const Text(
+                               Text(
                                 'Create Account',
                                 style: AppTextStyles.headline1,
                               ),

@@ -105,26 +105,32 @@ class UserProvider extends ChangeNotifier {
   }
 
   // Follow/Unfollow user
-  Future<bool> toggleFollow(String userId) async {
+  Future<bool> toggleFollow(String currentUserId, String targetUserId) async {
     try {
-      final response = await _apiService.post('/users/follow/$userId');
+      final response = await _apiService.post('/users/follow/$targetUserId');
       
       if (response.statusCode == 200) {
         final data = response.data;
-        final isFollowing = data['isFollowing'];
+        final isNowFollowing = data['isFollowing'];
         
         // Update cached user if exists
-        final user = _userProfiles.values.firstWhere(
-          (user) => user.id == userId,
+        final targetUser = _userProfiles.values.firstWhere(
+          (user) => user.id == targetUserId,
           orElse: () => _userProfiles.values.first,
         );
         
-        if (_userProfiles.containsKey(user.username)) {
-          _userProfiles[user.username] = user.copyWith(
-            isFollowing: isFollowing,
-            followersCount: isFollowing 
-                ? user.followersCount + 1 
-                : user.followersCount - 1,
+        if (_userProfiles.containsKey(targetUser.username)) {
+          // Update followers list and count
+          List<String> updatedFollowers = List.from(targetUser.followers);
+          if (isNowFollowing) {
+            updatedFollowers.add(currentUserId);
+          } else {
+            updatedFollowers.remove(currentUserId);
+          }
+          
+          _userProfiles[targetUser.username] = targetUser.copyWith(
+            followers: updatedFollowers,
+            followersCount: updatedFollowers.length,
           );
           notifyListeners();
         }

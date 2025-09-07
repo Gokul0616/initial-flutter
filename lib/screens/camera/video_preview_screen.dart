@@ -164,7 +164,7 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
               ),
             )
           else
-            const Center(
+            Center(
               child: CircularProgressIndicator(color: AppColors.primary),
             ),
 
@@ -303,7 +303,7 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Caption Input
-                const Text(
+                 Text(
                   'Add a caption',
                   style: AppTextStyles.headline5,
                 ),
@@ -322,7 +322,7 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
                 const SizedBox(height: 24),
 
                 // Privacy Settings
-                const Text(
+                 Text(
                   'Privacy Settings',
                   style: AppTextStyles.headline5,
                 ),
@@ -387,7 +387,7 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
                                   ),
                                 ],
                               )
-                            : const Text(
+                            :  Text(
                                 'Post',
                                 style: AppTextStyles.buttonLarge,
                               ),

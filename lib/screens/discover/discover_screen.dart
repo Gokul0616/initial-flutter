@@ -116,7 +116,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
         }
 
         if (userProvider.searchLoading) {
-          return const Center(
+          return  Center(
             child: CircularProgressIndicator(color: AppColors.primary),
           );
         }
@@ -132,7 +132,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                   color: AppColors.textSecondary,
                 ),
                 const SizedBox(height: 16),
-                const Text(
+                 Text(
                   'No users found',
                   style: AppTextStyles.headline5,
                 ),
@@ -166,7 +166,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+           Text(
             'Trending Categories',
             style: AppTextStyles.headline5,
           ),
@@ -192,7 +192,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
           
           const SizedBox(height: 32),
           
-          const Text(
+           Text(
             'Popular Hashtags',
             style: AppTextStyles.headline5,
           ),
@@ -285,7 +285,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => ProfileScreen(username: user.username),
+            builder: (context) => ProfileScreen(userId: user.id),
           ),
         );
       },
@@ -315,7 +315,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                       ),
                       if (user.isVerified) ...[
                         const SizedBox(width: 4),
-                        const Icon(
+                         Icon(
                           Icons.verified,
                           color: AppColors.secondary,
                           size: 16,
@@ -345,7 +345,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                   user.followersCountText,
                   style: AppTextStyles.counter,
                 ),
-                const Text(
+                 Text(
                   'followers',
                   style: AppTextStyles.labelSmall,
                 ),
@@ -358,22 +358,22 @@ class _DiscoverScreenState extends State<DiscoverScreen>
   }
 
   Widget _buildSoundsTab() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
+          const Icon(
             Icons.music_note,
             size: 64,
             color: AppColors.textSecondary,
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             'Sounds Coming Soon',
             style: AppTextStyles.headline5,
           ),
-          SizedBox(height: 8),
-          Text(
+          const SizedBox(height: 8),
+          const Text(
             'Search for trending sounds and music',
             style: TextStyle(color: AppColors.textSecondary),
           ),
@@ -383,22 +383,22 @@ class _DiscoverScreenState extends State<DiscoverScreen>
   }
 
   Widget _buildHashtagsTab() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
+          const Icon(
             Icons.tag,
             size: 64,
             color: AppColors.textSecondary,
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             'Hashtags Coming Soon',
             style: AppTextStyles.headline5,
           ),
-          SizedBox(height: 8),
-          Text(
+          const SizedBox(height: 8),
+          const Text(
             'Discover trending hashtags and challenges',
             style: TextStyle(color: AppColors.textSecondary),
           ),

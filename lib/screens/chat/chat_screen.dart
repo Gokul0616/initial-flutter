@@ -89,7 +89,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     if (widget.user.isVerified) ...[
                       const SizedBox(width: 4),
-                      const Icon(
+                       Icon(
                         Icons.verified,
                         color: AppColors.primary,
                         size: 16,
@@ -126,7 +126,7 @@ class _ChatScreenState extends State<ChatScreen> {
         final currentUser = context.read<AuthProvider>().user;
 
         if (isLoading && messages.isEmpty) {
-          return const Center(
+          return  Center(
             child: CircularProgressIndicator(color: AppColors.primary),
           );
         }

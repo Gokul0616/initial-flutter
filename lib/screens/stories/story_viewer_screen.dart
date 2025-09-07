@@ -182,7 +182,10 @@ class _StoryViewerScreenState extends State<StoryViewerScreen> {
     final story = storyGroup.stories[_currentStoryIndex];
     
     // Mark story as viewed
-    context.read<StoryProvider>().viewStory(story.id);
+    final currentUser = context.read<AuthProvider>().user;
+    if (currentUser != null) {
+      context.read<StoryProvider>().viewStory(story.id, currentUser.id);
+    }
     
     return _buildStoryView(story);
   }
@@ -284,7 +287,7 @@ class _StoryViewerScreenState extends State<StoryViewerScreen> {
                         ),
                         if (story.creator.isVerified) ...[
                           const SizedBox(width: 4),
-                          const Icon(
+                           Icon(
                             Icons.verified,
                             color: AppColors.primary,
                             size: 16,

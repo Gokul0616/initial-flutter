@@ -223,7 +223,7 @@ class StoryProvider extends ChangeNotifier {
   }
 
   // View story (mark as viewed)
-  Future<void> viewStory(String storyId) async {
+  Future<void> viewStory(String storyId, String id) async {
     try {
       await _apiService.post('/stories/$storyId/view');
       
@@ -388,6 +388,35 @@ class StoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+    // Reply to a story
+  Future<bool> replyToStory(String storyId, String message) async {
+    try {
+      final response = await _apiService.post(
+        '/stories/$storyId/reply',
+        data: {'message': message},
+      );
+      
+      if (response.statusCode == 200) {
+        // Update local data if needed
+        for (var group in _storyGroups) {
+          for (var story in group.stories) {
+            if (story.id == storyId) {
+              // Add reply to story's replies if we're maintaining that locally
+              break;
+            }
+          }
+        }
+        notifyListeners();
+        return true;
+      }
+    } on DioException catch (e) {
+      debugPrint('Error replying to story: ${e.message}');
+    } catch (e) {
+      debugPrint('Error replying to story: $e');
+    }
+    return false;
+  }
+
   // Clear all data
   void clear() {
     _storyGroups.clear();
@@ -399,8 +428,6 @@ class StoryProvider extends ChangeNotifier {
     _creatingStory = false;
     _uploadingMedia = false;
     _viewersLoading = false;
-    _currentStoryGroupIndex = 0;
-    _currentStoryIndex = 0;
     notifyListeners();
   }
 }

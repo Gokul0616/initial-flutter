@@ -258,7 +258,7 @@ class _CameraScreenState extends State<CameraScreen>
               ),
             )
           else
-            const Center(
+             Center(
               child: CircularProgressIndicator(color: AppColors.primary),
             ),
 

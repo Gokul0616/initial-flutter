@@ -147,11 +147,11 @@ async function addDummyData() {
   try {
     // Connect to MongoDB
     console.log('Connecting to MongoDB...');
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log('✅ Connected to MongoDB');
+    // await mongoose.connect(process.env.MONGODB_URI, {
+    //   useNewUrlParser: true,
+    //   useUnifiedTopology: true,
+    // });
+    console.log('✅ Connected to MongoDB from dummy data');
 
     // Clear existing dummy data
     console.log('Clearing existing dummy data...');
@@ -298,9 +298,9 @@ async function addDummyData() {
   } catch (error) {
     console.error('❌ Error adding dummy data:', error);
   } finally {
-    await mongoose.disconnect();
+    // await mongoose.disconnect();
     console.log('Disconnected from MongoDB');
   }
 }
 
-addDummyData();
+module.exports = addDummyData;

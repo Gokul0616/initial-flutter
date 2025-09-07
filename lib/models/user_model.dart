@@ -79,6 +79,10 @@ class UserModel {
     );
   }
 
+  bool isFollowedBy(String userId) {
+    return followers.contains(userId);
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,

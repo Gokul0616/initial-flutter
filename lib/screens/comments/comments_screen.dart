@@ -123,7 +123,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                   ),
                 ),
                 const Spacer(),
-                const Text(
+                Text(
                   'Comments',
                   style: AppTextStyles.headline5,
                 ),
@@ -147,7 +147,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                 final isLoading = commentProvider.isCommentsLoading(widget.videoId);
 
                 if (isLoading && comments.isEmpty) {
-                  return const Center(
+                  return  Center(
                     child: CircularProgressIndicator(color: AppColors.primary),
                   );
                 }
@@ -163,7 +163,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                           color: AppColors.textSecondary,
                         ),
                         const SizedBox(height: 16),
-                        const Text(
+                        Text(
                           'No comments yet',
                           style: AppTextStyles.headline5,
                         ),
@@ -240,7 +240,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                 return Row(
                   children: [
                     UserAvatar(
-                      imageUrl: authProvider.user?.profileImageUrl ?? '',
+                      imageUrl: authProvider.user?.profilePictureUrl ?? '',
                       size: 32,
                     ),
                     const SizedBox(width: 12),
@@ -307,7 +307,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           UserAvatar(
-            imageUrl: comment.user.profileImageUrl,
+            imageUrl: comment.user.profilePictureUrl,
             size: 32,
           ),
           const SizedBox(width: 12),
@@ -324,7 +324,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     ),
                     if (comment.user.isVerified) ...[
                       const SizedBox(width: 4),
-                      const Icon(
+                       Icon(
                         Icons.verified,
                         color: AppColors.secondary,
                         size: 12,
@@ -422,7 +422,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
 
         // Loading indicator
         if (isLoadingReplies)
-          const Padding(
+           Padding(
             padding: EdgeInsets.only(top: 8),
             child: SizedBox(
               width: 16,
@@ -448,7 +448,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         UserAvatar(
-          imageUrl: reply.user.profileImageUrl,
+          imageUrl: reply.user.profilePictureUrl,
           size: 24,
         ),
         const SizedBox(width: 8),

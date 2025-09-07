@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/socket_provider.dart';
 import '../../utils/theme.dart';
+import '../../utils/dimensions.dart';
 import '../home/home_screen.dart';
 import '../discover/discover_screen.dart';
 import '../camera/camera_screen.dart';
@@ -80,7 +81,7 @@ class _MainScreenState extends State<MainScreen> {
           const HomeScreen(),
           const DiscoverScreen(),
           const MessagesScreen(),
-          ProfileScreen(username: authProvider.user?.username ?? ''),
+          ProfileScreen(userId: authProvider.user?.username ?? ''),
         ],
       ),
       bottomNavigationBar: Container(
