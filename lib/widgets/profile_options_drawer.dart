@@ -709,9 +709,9 @@ class ProfileOptionsDrawer extends StatelessWidget {
               // Perform logout
               context.read<AuthProvider>().logout();
             },
-            child: const Text(
+            child: Text(
               'Log Out',
-              style: TextStyle(color: AppColors.error),
+              style: TextStyle(color: Colors.red),
             ),
           ),
         ],
