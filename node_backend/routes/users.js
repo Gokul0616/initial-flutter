@@ -116,6 +116,51 @@ router.put('/profile', auth, upload.single('profilePicture'), async (req, res) =
   }
 });
 
+// Update user theme preference
+router.put('/theme', auth, async (req, res) => {
+  try {
+    const { themePreference } = req.body;
+    const user = req.user;
+
+    if (!themePreference) {
+      return res.status(400).json({ error: 'Theme preference is required' });
+    }
+
+    const validThemes = ['darkClassic', 'lightClassic', 'darkNeon', 'lightPastel', 'darkPurple', 'lightGreen', 'darkOrange', 'lightBlue'];
+    
+    if (!validThemes.includes(themePreference)) {
+      return res.status(400).json({ error: 'Invalid theme preference' });
+    }
+
+    user.themePreference = themePreference;
+    await user.save();
+
+    res.json({
+      message: 'Theme updated successfully',
+      themePreference: user.themePreference
+    });
+
+  } catch (error) {
+    console.error('Update theme error:', error);
+    res.status(500).json({ error: 'Server error updating theme' });
+  }
+});
+
+// Get user theme preference
+router.get('/theme', auth, async (req, res) => {
+  try {
+    const user = req.user;
+    
+    res.json({
+      themePreference: user.themePreference || 'darkClassic'
+    });
+
+  } catch (error) {
+    console.error('Get theme error:', error);
+    res.status(500).json({ error: 'Server error fetching theme' });
+  }
+});
+
 // Follow/Unfollow user
 router.post('/follow/:userId', auth, async (req, res) => {
   try {
