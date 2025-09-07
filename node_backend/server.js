@@ -31,6 +31,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Make io available to routes
 app.set('io', io);
+const  addData =async()=>{
+  await addDummyData();
+}
+// addData();
 
 // Database connection
 mongoose.connect(process.env.MONGODB_URI, {
@@ -174,10 +178,7 @@ app.use((error, req, res, next) => {
 app.use('*', (req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
-const  addData =async()=>{
-  await addDummyData();
-}
-addData();
+
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
   console.log(`🚀 TikTok Clone Server running on port ${PORT}`);

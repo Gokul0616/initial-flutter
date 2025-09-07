@@ -297,9 +297,9 @@ async function addDummyData() {
     
   } catch (error) {
     console.error('❌ Error adding dummy data:', error);
-  } finally {
+  // } finally {
     // await mongoose.disconnect();
-    console.log('Disconnected from MongoDB');
+    // console.log('Disconnected from MongoDB');
   }
 }
 

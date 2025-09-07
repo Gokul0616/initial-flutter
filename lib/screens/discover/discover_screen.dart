@@ -285,7 +285,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => ProfileScreen(userId: user.id),
+            builder: (context) => ProfileScreen(userId: user.username),
           ),
         );
       },
@@ -299,7 +299,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
         child: Row(
           children: [
             UserAvatar(
-              imageUrl: user.profileImageUrl,
+              imageUrl: user!.profilePictureUrl,
               size: 48,
             ),
             const SizedBox(width: 12),
@@ -342,7 +342,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
             Column(
               children: [
                 Text(
-                  user.followersCountText,
+                  user.followersCount.toString(),
                   style: AppTextStyles.counter,
                 ),
                  Text(

@@ -42,16 +42,17 @@ class _ProfileScreenState extends State<ProfileScreen>
   Future<void> _loadUserProfile() async {
     final authProvider = context.read<AuthProvider>();
     final userProvider = context.read<UserProvider>();
-    
-    if (widget.userId == null) {
+     
+    if (widget.userId == null || widget.userId == authProvider.user?.username) {
       // Current user profile
       _user = authProvider.user;
+    
       _isCurrentUser = true;
     } else {
       // Other user profile
       _user = await userProvider.getUserProfile(widget.userId!);
-      _isCurrentUser = _user?.id == authProvider.user?.id;
-      if (!_isCurrentUser && _user != null) {
+      _isCurrentUser = false;
+      if (_user != null) {
         _isFollowing = authProvider.user?.following.contains(_user!.id) ?? false;
       }
     }
@@ -94,6 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             pinned: true,
             backgroundColor: context.primarySurface,
             elevation: 0,
+            centerTitle: true,
             flexibleSpace: FlexibleSpaceBar(
               background: _buildProfileHeader(),
             ),
