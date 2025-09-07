@@ -127,6 +127,7 @@ userSchema.methods.toProfileJSON = function() {
     videosCount: this.videosCount,
     isVerified: this.isVerified,
     isPrivate: this.isPrivate,
+    themePreference: this.themePreference,
     createdAt: this.createdAt
   };
 };
