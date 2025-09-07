@@ -305,7 +305,7 @@ class ProfileOptionsDrawer extends StatelessWidget {
     bool isSelected, 
     VoidCallback onTap
   ) {
-    final themeColors = AppTheme._getThemeColors(theme);
+    final themeColors = _getThemeColorsForDisplay(theme);
     final themeName = _getThemeName(theme);
     
     return GestureDetector(
@@ -381,6 +381,51 @@ class ProfileOptionsDrawer extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Map<String, Color> _getThemeColorsForDisplay(AppThemeType themeType) {
+    switch (themeType) {
+      case AppThemeType.darkClassic:
+        return {
+          'primary': AppColors.primaryClassic,
+          'secondary': AppColors.secondaryClassic,
+        };
+      case AppThemeType.lightClassic:
+        return {
+          'primary': AppColors.primaryClassic,
+          'secondary': AppColors.secondaryClassic,
+        };
+      case AppThemeType.darkNeon:
+        return {
+          'primary': AppColors.primaryNeon,
+          'secondary': AppColors.secondaryNeon,
+        };
+      case AppThemeType.lightPastel:
+        return {
+          'primary': AppColors.primaryPastel,
+          'secondary': AppColors.secondaryPastel,
+        };
+      case AppThemeType.darkPurple:
+        return {
+          'primary': AppColors.primaryPurple,
+          'secondary': AppColors.secondaryPurple,
+        };
+      case AppThemeType.lightGreen:
+        return {
+          'primary': AppColors.primaryGreen,
+          'secondary': AppColors.secondaryGreen,
+        };
+      case AppThemeType.darkOrange:
+        return {
+          'primary': AppColors.primaryOrange,
+          'secondary': AppColors.secondaryOrange,
+        };
+      case AppThemeType.lightBlue:
+        return {
+          'primary': AppColors.primaryBlue,
+          'secondary': AppColors.secondaryBlue,
+        };
+    }
   }
 
   String _getThemeName(AppThemeType theme) {
