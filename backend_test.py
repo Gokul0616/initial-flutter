@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Comprehensive Backend API Testing for Instagram-like Stories and Enhanced Messaging
-Tests all Stories and Messages endpoints with realistic data
+Comprehensive Backend API Testing for Enhanced Theme System
+Tests all Theme API endpoints with realistic data and validation
 """
 
 import requests
@@ -14,6 +14,18 @@ import uuid
 # Configuration
 BASE_URL = "http://localhost:3001/api"
 UPLOAD_DIR = "/tmp/test_uploads"
+
+# Valid theme values for testing
+VALID_THEMES = [
+    'darkClassic', 'lightClassic', 'darkNeon', 'lightPastel', 
+    'darkPurple', 'lightGreen', 'darkOrange', 'lightBlue'
+]
+
+# Invalid theme values for testing
+INVALID_THEMES = [
+    'invalidTheme', 'dark', 'light', 'neon', 'purple', 
+    'green', 'orange', 'blue', '', None, 123, True
+]
 
 # Test data
 TEST_USERS = [
