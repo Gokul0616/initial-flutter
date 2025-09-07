@@ -319,7 +319,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _isFollowing 
                           ? context.primarySurface 
-                          : AppColors.primary,
+                          : context.colorScheme.primary,
                       foregroundColor: _isFollowing 
                           ? context.primaryText 
                           : Colors.white,
