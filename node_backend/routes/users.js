@@ -79,12 +79,18 @@ router.get('/profile/:username', optionalAuth, async (req, res) => {
 // Update user profile
 router.put('/profile', auth, upload.single('profilePicture'), async (req, res) => {
   try {
-    const { displayName, bio } = req.body;
+    const { displayName, bio, themePreference } = req.body;
     const user = req.user;
 
     // Update basic info
     if (displayName) user.displayName = displayName;
     if (bio !== undefined) user.bio = bio;
+    if (themePreference) {
+      const validThemes = ['darkClassic', 'lightClassic', 'darkNeon', 'lightPastel', 'darkPurple', 'lightGreen', 'darkOrange', 'lightBlue'];
+      if (validThemes.includes(themePreference)) {
+        user.themePreference = themePreference;
+      }
+    }
 
     // Handle profile picture upload
     if (req.file) {
