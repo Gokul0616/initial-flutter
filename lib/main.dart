@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'providers/auth_provider.dart';
 import 'providers/video_provider.dart';
@@ -10,9 +9,9 @@ import 'providers/comment_provider.dart';
 import 'providers/socket_provider.dart';
 import 'providers/story_provider.dart';
 import 'providers/message_provider.dart';
+import 'providers/theme_provider.dart';
 import 'screens/splash_screen.dart';
 import 'utils/theme.dart';
-import 'utils/constants.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +21,7 @@ void main() {
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: AppColors.background,
+      systemNavigationBarColor: AppColors.backgroundDark,
       systemNavigationBarIconBrightness: Brightness.light,
     ),
   );
@@ -43,6 +42,7 @@ class TikTokCloneApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => VideoProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
@@ -51,78 +51,30 @@ class TikTokCloneApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => StoryProvider()),
         ChangeNotifierProvider(create: (_) => MessageProvider()),
       ],
-      child: Consumer<AuthProvider>(
-        builder: (context, authProvider, child) {
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          // Update system UI overlay style based on theme
+          SystemChrome.setSystemUIOverlayStyle(
+            SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+              statusBarIconBrightness: themeProvider.isDarkMode 
+                  ? Brightness.light 
+                  : Brightness.dark,
+              systemNavigationBarColor: themeProvider.isDarkMode 
+                  ? AppColors.backgroundDark 
+                  : AppColors.backgroundLight,
+              systemNavigationBarIconBrightness: themeProvider.isDarkMode 
+                  ? Brightness.light 
+                  : Brightness.dark,
+            ),
+          );
+
           return MaterialApp(
             title: 'TikTok Clone',
             debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: AppColors.primary,
-                brightness: Brightness.dark,
-              ),
-              scaffoldBackgroundColor: AppColors.background,
-              textTheme: GoogleFonts.interTextTheme(
-                Theme.of(context).textTheme.apply(
-                  bodyColor: AppColors.textPrimary,
-                  displayColor: AppColors.textPrimary,
-                ),
-              ),
-              appBarTheme: const AppBarTheme(
-                backgroundColor: AppColors.surface,
-                elevation: 0,
-                systemOverlayStyle: SystemUiOverlayStyle(
-                  statusBarColor: Colors.transparent,
-                  statusBarIconBrightness: Brightness.light,
-                ),
-              ),
-              bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-                backgroundColor: AppColors.surface,
-                selectedItemColor: AppColors.primary,
-                unselectedItemColor: AppColors.textSecondary,
-                type: BottomNavigationBarType.fixed,
-                elevation: 0,
-              ),
-              elevatedButtonTheme: ElevatedButtonThemeData(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-              ),
-              textButtonTheme: TextButtonThemeData(
-                style: TextButton.styleFrom(
-                  foregroundColor: AppColors.primary,
-                ),
-              ),
-              inputDecorationTheme: InputDecorationTheme(
-                filled: true,
-                fillColor: AppColors.surfaceVariant,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
-                ),
-                hintStyle: const TextStyle(color: AppColors.textSecondary),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              ),
-              cardTheme: CardThemeData(
-                color: AppColors.surface,
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              dialogTheme: DialogThemeData(
-                backgroundColor: AppColors.surface,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
-              useMaterial3: true,
-            ),
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: themeProvider.themeMode,
             home: const SplashScreen(),
           );
         },
