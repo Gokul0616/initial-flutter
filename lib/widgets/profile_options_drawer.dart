@@ -138,7 +138,7 @@ class ProfileOptionsDrawer extends StatelessWidget {
                   icon: Icons.logout,
                   title: 'Log Out',
                   subtitle: 'Sign out of your account',
-                  textColor: AppColors.error,
+                  textColor: Colors.red,
                   onTap: () {
                     Navigator.pop(context);
                     _showLogoutDialog(context);
