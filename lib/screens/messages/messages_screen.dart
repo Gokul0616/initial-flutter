@@ -65,9 +65,9 @@ class _MessagesScreenState extends State<MessagesScreen> {
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Search conversations...',
-                prefixIcon: const Icon(Icons.search, color: AppColors.textSecondary),
+                prefixIcon: Icon(Icons.search, color: context.secondaryText),
                 filled: true,
-                fillColor: AppColors.surfaceVariant,
+                fillColor: context.primarySurface,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25),
                   borderSide: BorderSide.none,
