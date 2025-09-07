@@ -453,7 +453,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 child: const Center(
                   child: Icon(
                     Icons.favorite,
-                    color: AppColors.primary,
+                    color: Colors.red,
                     size: 32,
                   ),
                 ),
