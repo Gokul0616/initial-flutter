@@ -83,6 +83,12 @@ const userSchema = new mongoose.Schema({
   lastActive: {
     type: Date,
     default: Date.now
+  },
+  // Theme preferences
+  themePreference: {
+    type: String,
+    enum: ['darkClassic', 'lightClassic', 'darkNeon', 'lightPastel', 'darkPurple', 'lightGreen', 'darkOrange', 'lightBlue'],
+    default: 'darkClassic'
   }
 }, {
   timestamps: true
