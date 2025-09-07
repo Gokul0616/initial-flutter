@@ -4,11 +4,11 @@ import '../providers/theme_provider.dart';
 import '../services/api_service.dart';
 
 class ThemeService {
-  static final Dio _dio = ApiService.dio;
+  static final ApiService _apiService = ApiService();
 
   static Future<AppThemeType?> getUserTheme() async {
     try {
-      final response = await _dio.get('/api/users/theme');
+      final response = await _apiService.get('/users/theme');
       
       if (response.statusCode == 200) {
         final themePreference = response.data['themePreference'] as String;
@@ -22,8 +22,8 @@ class ThemeService {
 
   static Future<bool> updateUserTheme(AppThemeType theme) async {
     try {
-      final response = await _dio.put(
-        '/api/users/theme',
+      final response = await _apiService.put(
+        '/users/theme',
         data: {
           'themePreference': theme.name,
         },
