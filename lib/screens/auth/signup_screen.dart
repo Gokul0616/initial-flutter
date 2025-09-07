@@ -164,7 +164,7 @@ class _SignUpScreenState extends State<SignUpScreen>
         elevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+          icon: Icon(Icons.arrow_back, color: context.primaryText),
         ),
       ),
       body: SafeArea(
