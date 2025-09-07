@@ -3,7 +3,7 @@ import 'user_model.dart';
 
 class MessageMedia {
   final String url;
-  final String type; // 'image', 'video', 'audio', 'file'
+  final String type; // 'image', 'video', 'audio', 'file', 'gif', 'sticker'
   final String filename;
   final int size;
   final String? thumbnail;
@@ -21,6 +21,28 @@ class MessageMedia {
     this.width,
     this.height,
   });
+
+  MessageMedia copyWith({
+    String? url,
+    String? type,
+    String? filename,
+    int? size,
+    String? thumbnail,
+    int? duration,
+    int? width,
+    int? height,
+  }) {
+    return MessageMedia(
+      url: url ?? this.url,
+      type: type ?? this.type,
+      filename: filename ?? this.filename,
+      size: size ?? this.size,
+      thumbnail: thumbnail ?? this.thumbnail,
+      duration: duration ?? this.duration,
+      width: width ?? this.width,
+      height: height ?? this.height,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -66,11 +88,134 @@ class MessageMedia {
   bool get isVideo => type == 'video';
   bool get isAudio => type == 'audio';
   bool get isFile => type == 'file';
+  bool get isGif => type == 'gif';
+  bool get isSticker => type == 'sticker';
 
   String get sizeText {
     if (size < 1024) return '${size}B';
     if (size < 1024 * 1024) return '${(size / 1024).toStringAsFixed(1)}KB';
     return '${(size / (1024 * 1024)).toStringAsFixed(1)}MB';
+  }
+}
+
+class VoiceNote {
+  final String url;
+  final int duration;
+  final List<double> visualData; // Waveform data
+
+  VoiceNote({
+    required this.url,
+    required this.duration,
+    this.visualData = const [],
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'url': url,
+      'duration': duration,
+      'visualData': visualData,
+    };
+  }
+
+  factory VoiceNote.fromMap(Map<String, dynamic> map) {
+    return VoiceNote(
+      url: map['url'] ?? '',
+      duration: map['duration']?.toInt() ?? 0,
+      visualData: List<double>.from(map['visualData'] ?? []),
+    );
+  }
+
+  String get fullUrl {
+    if (url.isEmpty) return '';
+    return url.startsWith('http') 
+        ? url 
+        : 'http://localhost:3001$url';
+  }
+
+  String get durationText {
+    final minutes = duration ~/ 60;
+    final seconds = duration % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
+}
+
+class MessagePosition {
+  final double x;
+  final double y;
+
+  MessagePosition({
+    required this.x,
+    required this.y,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'x': x,
+      'y': y,
+    };
+  }
+
+  factory MessagePosition.fromMap(Map<String, dynamic> map) {
+    return MessagePosition(
+      x: map['x']?.toDouble() ?? 0.0,
+      y: map['y']?.toDouble() ?? 0.0,
+    );
+  }
+}
+
+class MessageMention {
+  final String userId;
+  final String username;
+  final int start;
+  final int end;
+
+  MessageMention({
+    required this.userId,
+    required this.username,
+    required this.start,
+    required this.end,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'userId': userId,
+      'username': username,
+      'start': start,
+      'end': end,
+    };
+  }
+
+  factory MessageMention.fromMap(Map<String, dynamic> map) {
+    return MessageMention(
+      userId: map['userId'] ?? '',
+      username: map['username'] ?? '',
+      start: map['start']?.toInt() ?? 0,
+      end: map['end']?.toInt() ?? 0,
+    );
+  }
+}
+
+class MessageEditHistory {
+  final String text;
+  final DateTime editedAt;
+
+  MessageEditHistory({
+    required this.text,
+    required this.editedAt,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'text': text,
+      'editedAt': editedAt.toIso8601String(),
+    };
+  }
+
+  factory MessageEditHistory.fromMap(Map<String, dynamic> map) {
+    return MessageEditHistory(
+      text: map['text'] ?? '',
+      editedAt: DateTime.parse(map['editedAt'] ?? DateTime.now().toIso8601String()),
+    );
   }
 }
 
@@ -134,11 +279,15 @@ class MessageReply {
   final String messageId;
   final String text;
   final String senderName;
+  final String? mediaUrl;
+  final String messageType;
 
   MessageReply({
     required this.messageId,
     required this.text,
     required this.senderName,
+    this.mediaUrl,
+    this.messageType = 'text',
   });
 
   Map<String, dynamic> toMap() {
@@ -146,6 +295,8 @@ class MessageReply {
       'messageId': messageId,
       'text': text,
       'senderName': senderName,
+      'mediaUrl': mediaUrl,
+      'messageType': messageType,
     };
   }
 
@@ -154,6 +305,8 @@ class MessageReply {
       messageId: map['messageId'] ?? '',
       text: map['text'] ?? '',
       senderName: map['senderName'] ?? '',
+      mediaUrl: map['mediaUrl'],
+      messageType: map['messageType'] ?? 'text',
     );
   }
 }
@@ -163,16 +316,23 @@ class MessageModel {
   final String text;
   final UserModel sender;
   final UserModel recipient;
-  final String messageType; // 'text', 'image', 'video', 'audio', 'story_reply', 'media_group'
+  final String messageType; // 'text', 'image', 'video', 'audio', 'story_reply', 'media_group', 'sticker', 'gif'
   final MessageMedia? media;
   final List<MessageMedia> mediaGroup;
   final StoryReplyData? storyReply;
   final List<MessageReaction> reactions;
   final MessageReply? replyTo;
+  final MessagePosition? position; // For drag functionality
   final bool isRead;
   final DateTime? readAt;
   final String status; // 'sending', 'sent', 'delivered', 'read'
   final DateTime? expiresAt;
+  final bool isEdited;
+  final DateTime? editedAt;
+  final List<MessageEditHistory> editHistory;
+  final List<MessageMention> mentions;
+  final List<String> hashtags;
+  final VoiceNote? voiceNote;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -187,10 +347,17 @@ class MessageModel {
     this.storyReply,
     this.reactions = const [],
     this.replyTo,
+    this.position,
     this.isRead = false,
     this.readAt,
     this.status = 'sent',
     this.expiresAt,
+    this.isEdited = false,
+    this.editedAt,
+    this.editHistory = const [],
+    this.mentions = const [],
+    this.hashtags = const [],
+    this.voiceNote,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -206,10 +373,17 @@ class MessageModel {
     StoryReplyData? storyReply,
     List<MessageReaction>? reactions,
     MessageReply? replyTo,
+    MessagePosition? position,
     bool? isRead,
     DateTime? readAt,
     String? status,
     DateTime? expiresAt,
+    bool? isEdited,
+    DateTime? editedAt,
+    List<MessageEditHistory>? editHistory,
+    List<MessageMention>? mentions,
+    List<String>? hashtags,
+    VoiceNote? voiceNote,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -224,10 +398,17 @@ class MessageModel {
       storyReply: storyReply ?? this.storyReply,
       reactions: reactions ?? this.reactions,
       replyTo: replyTo ?? this.replyTo,
+      position: position ?? this.position,
       isRead: isRead ?? this.isRead,
       readAt: readAt ?? this.readAt,
       status: status ?? this.status,
       expiresAt: expiresAt ?? this.expiresAt,
+      isEdited: isEdited ?? this.isEdited,
+      editedAt: editedAt ?? this.editedAt,
+      editHistory: editHistory ?? this.editHistory,
+      mentions: mentions ?? this.mentions,
+      hashtags: hashtags ?? this.hashtags,
+      voiceNote: voiceNote ?? this.voiceNote,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -245,10 +426,17 @@ class MessageModel {
       'storyReply': storyReply?.toMap(),
       'reactions': reactions.map((x) => x.toMap()).toList(),
       'replyTo': replyTo?.toMap(),
+      'position': position?.toMap(),
       'isRead': isRead,
       'readAt': readAt?.toIso8601String(),
       'status': status,
       'expiresAt': expiresAt?.toIso8601String(),
+      'isEdited': isEdited,
+      'editedAt': editedAt?.toIso8601String(),
+      'editHistory': editHistory.map((x) => x.toMap()).toList(),
+      'mentions': mentions.map((x) => x.toMap()).toList(),
+      'hashtags': hashtags,
+      'voiceNote': voiceNote?.toMap(),
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
     };
@@ -270,10 +458,21 @@ class MessageModel {
         map['reactions']?.map((x) => MessageReaction.fromMap(x)) ?? []
       ),
       replyTo: map['replyTo'] != null ? MessageReply.fromMap(map['replyTo']) : null,
+      position: map['position'] != null ? MessagePosition.fromMap(map['position']) : null,
       isRead: map['isRead'] ?? false,
       readAt: map['readAt'] != null ? DateTime.parse(map['readAt']) : null,
       status: map['status'] ?? 'sent',
       expiresAt: map['expiresAt'] != null ? DateTime.parse(map['expiresAt']) : null,
+      isEdited: map['isEdited'] ?? false,
+      editedAt: map['editedAt'] != null ? DateTime.parse(map['editedAt']) : null,
+      editHistory: List<MessageEditHistory>.from(
+        map['editHistory']?.map((x) => MessageEditHistory.fromMap(x)) ?? []
+      ),
+      mentions: List<MessageMention>.from(
+        map['mentions']?.map((x) => MessageMention.fromMap(x)) ?? []
+      ),
+      hashtags: List<String>.from(map['hashtags'] ?? []),
+      voiceNote: map['voiceNote'] != null ? VoiceNote.fromMap(map['voiceNote']) : null,
       createdAt: DateTime.parse(map['createdAt'] ?? DateTime.now().toIso8601String()),
       updatedAt: DateTime.parse(map['updatedAt'] ?? DateTime.now().toIso8601String()),
     );
@@ -282,6 +481,12 @@ class MessageModel {
   String toJson() => json.encode(toMap());
 
   factory MessageModel.fromJson(String source) => MessageModel.fromMap(json.decode(source));
+
+  // Check if message is editable (within 3 hours and not deleted)
+  bool get canEdit {
+    final threeHoursAgo = DateTime.now().subtract(const Duration(hours: 3));
+    return createdAt.isAfter(threeHoursAgo) && messageType == 'text';
+  }
 
   String get timeAgo {
     final now = DateTime.now();
@@ -326,7 +531,25 @@ class MessageModel {
     if (messageType == 'audio') return '🎵 Audio';
     if (messageType == 'story_reply') return '💬 Replied to story';
     if (messageType == 'media_group') return '📷 ${mediaGroup.length} photos';
+    if (messageType == 'sticker') return '🎭 Sticker';
+    if (messageType == 'gif') return '🎬 GIF';
+    if (voiceNote != null) return '🎤 Voice message';
     return 'Message';
+  }
+
+  String get editTimeRemaining {
+    if (!canEdit) return '';
+    
+    final threeHoursLater = createdAt.add(const Duration(hours: 3));
+    final remaining = threeHoursLater.difference(DateTime.now());
+    
+    if (remaining.inHours > 0) {
+      return '${remaining.inHours}h ${remaining.inMinutes % 60}m left to edit';
+    } else if (remaining.inMinutes > 0) {
+      return '${remaining.inMinutes}m left to edit';
+    } else {
+      return 'Less than 1m left to edit';
+    }
   }
 
   bool get hasMedia => media != null || mediaGroup.isNotEmpty;
@@ -336,10 +559,15 @@ class MessageModel {
   bool get isAudio => messageType == 'audio';
   bool get isStoryReply => messageType == 'story_reply';
   bool get isMediaGroup => messageType == 'media_group';
+  bool get isSticker => messageType == 'sticker';
+  bool get isGif => messageType == 'gif';
+  bool get hasVoiceNote => voiceNote != null;
 
   bool isFromCurrentUser(String currentUserId) => sender.id == currentUserId;
 
   bool get hasReactions => reactions.isNotEmpty;
+  bool get hasMentions => mentions.isNotEmpty;
+  bool get hasHashtags => hashtags.isNotEmpty;
 
   @override
   String toString() {
@@ -363,6 +591,8 @@ class ConversationModel {
   final int unreadCount;
   final bool hasStory;
   final Map<String, dynamic>? latestStory;
+  final bool isOnline;
+  final DateTime? lastActive;
 
   ConversationModel({
     required this.user,
@@ -370,6 +600,8 @@ class ConversationModel {
     required this.unreadCount,
     this.hasStory = false,
     this.latestStory,
+    this.isOnline = false,
+    this.lastActive,
   });
 
   factory ConversationModel.fromMap(Map<String, dynamic> map) {
@@ -379,6 +611,8 @@ class ConversationModel {
       unreadCount: map['unreadCount']?.toInt() ?? 0,
       hasStory: map['hasStory'] ?? false,
       latestStory: map['latestStory'],
+      isOnline: map['isOnline'] ?? false,
+      lastActive: map['lastActive'] != null ? DateTime.parse(map['lastActive']) : null,
     );
   }
 
@@ -387,5 +621,19 @@ class ConversationModel {
   String get unreadCountText {
     if (unreadCount > 99) return '99+';
     return unreadCount.toString();
+  }
+
+  String get lastActiveText {
+    if (isOnline) return 'Online';
+    if (lastActive == null) return 'Offline';
+    
+    final now = DateTime.now();
+    final difference = now.difference(lastActive!);
+    
+    if (difference.inMinutes < 1) return 'Just now';
+    if (difference.inMinutes < 60) return '${difference.inMinutes}m ago';
+    if (difference.inHours < 24) return '${difference.inHours}h ago';
+    if (difference.inDays < 7) return '${difference.inDays}d ago';
+    return 'Last seen ${difference.inDays}d ago';
   }
 }
