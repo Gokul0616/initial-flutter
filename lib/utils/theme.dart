@@ -222,6 +222,26 @@ class AppTextStyles {
         fontWeight: FontWeight.w400,
         letterSpacing: 0.5,
       );
+
+  // Button text styles
+  static TextStyle get buttonLarge => GoogleFonts.inter(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.1,
+      );
+
+  static TextStyle get buttonMedium => GoogleFonts.inter(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.1,
+      );
+
+  // Additional headline styles
+  static TextStyle get headline1 => GoogleFonts.inter(
+        fontSize: 40,
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.5,
+      );
 }
 
 class AppTheme {
