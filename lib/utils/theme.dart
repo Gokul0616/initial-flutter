@@ -175,6 +175,48 @@ class AppTextStyles {
         fontWeight: FontWeight.w400,
         letterSpacing: 0.4,
       );
+
+  // Additional text styles used throughout the app
+  static TextStyle get headline4 => GoogleFonts.inter(
+        fontSize: 34,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.25,
+      );
+
+  static TextStyle get headline5 => GoogleFonts.inter(
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+      );
+
+  static TextStyle get username => GoogleFonts.inter(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.1,
+      );
+
+  static TextStyle get displayName => GoogleFonts.inter(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 0.15,
+      );
+
+  static TextStyle get caption => GoogleFonts.inter(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        letterSpacing: 0.25,
+      );
+
+  static TextStyle get counter => GoogleFonts.inter(
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.1,
+      );
+
+  static TextStyle get timestamp => GoogleFonts.inter(
+        fontSize: 11,
+        fontWeight: FontWeight.w400,
+        letterSpacing: 0.5,
+      );
 }
 
 class AppTheme {
