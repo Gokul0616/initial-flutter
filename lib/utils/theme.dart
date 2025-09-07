@@ -1,62 +1,93 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../providers/theme_provider.dart';
 
 class AppColors {
-  // Primary Colors
-  static const Color primary = Color(0xFFFF0050);
-  static const Color primaryVariant = Color(0xFFE8004A);
-  static const Color secondary = Color(0xFF00F2EA);
-  static const Color secondaryVariant = Color(0xFF00D9D2);
+  // Classic Theme Colors (Dark)
+  static const Color primaryClassic = Color(0xFFFF0050);
+  static const Color secondaryClassic = Color(0xFF00F2EA);
+  static const Color backgroundDarkClassic = Color(0xFF000000);
+  static const Color surfaceDarkClassic = Color(0xFF1A1A1A);
+  static const Color textPrimaryDarkClassic = Color(0xFFFFFFFF);
+  static const Color textSecondaryDarkClassic = Color(0xFFB3B3B3);
 
-  // Dark Theme Colors
-  static const Color backgroundDark = Color(0xFF000000);
-  static const Color surfaceDark = Color(0xFF1A1A1A);
-  static const Color surfaceVariantDark = Color(0xFF2A2A2A);
-  static const Color textPrimaryDark = Color(0xFFFFFFFF);
-  static const Color textSecondaryDark = Color(0xFFB3B3B3);
-  static const Color borderDark = Color(0xFF333333);
-  static const Color cardDark = Color(0xFF1E1E1E);
+  // Classic Theme Colors (Light)
+  static const Color backgroundLightClassic = Color(0xFFFFFFFF);
+  static const Color surfaceLightClassic = Color(0xFFF8F9FA);
+  static const Color textPrimaryLightClassic = Color(0xFF000000);
+  static const Color textSecondaryLightClassic = Color(0xFF6C757D);
 
-  // Light Theme Colors
-  static const Color backgroundLight = Color(0xFFFFFFFF);
-  static const Color surfaceLight = Color(0xFFF8F9FA);
-  static const Color surfaceVariantLight = Color(0xFFE9ECEF);
-  static const Color textPrimaryLight = Color(0xFF000000);
-  static const Color textSecondaryLight = Color(0xFF6C757D);
-  static const Color borderLight = Color(0xFFDEE2E6);
-  static const Color cardLight = Color(0xFFFFFFFF);
+  // Neon Theme Colors (Dark)
+  static const Color primaryNeon = Color(0xFF00FFFF);
+  static const Color secondaryNeon = Color(0xFFFF00FF);
+  static const Color backgroundDarkNeon = Color(0xFF0A0A0A);
+  static const Color surfaceDarkNeon = Color(0xFF1F1F1F);
+  static const Color textPrimaryDarkNeon = Color(0xFF00FFFF);
+  static const Color textSecondaryDarkNeon = Color(0xFF80FFFF);
 
-  // Legacy colors for backward compatibility
-  static const Color background = backgroundDark;
-  static const Color surface = surfaceDark;
-  static const Color surfaceVariant = surfaceVariantDark;
-  static const Color textPrimary = textPrimaryDark;
-  static const Color textSecondary = textSecondaryDark;
-  static const Color border = borderDark;
+  // Pastel Theme Colors (Light)
+  static const Color primaryPastel = Color(0xFFFF6B6B);
+  static const Color secondaryPastel = Color(0xFF4ECDC4);
+  static const Color backgroundLightPastel = Color(0xFFFFF8F8);
+  static const Color surfaceLightPastel = Color(0xFFF0F8FF);
+  static const Color textPrimaryLightPastel = Color(0xFF2C3E50);
+  static const Color textSecondaryLightPastel = Color(0xFF7F8C8D);
 
-  // Status Colors
+  // Purple Theme Colors (Dark)
+  static const Color primaryPurple = Color(0xFF9B59B6);
+  static const Color secondaryPurple = Color(0xFFE74C3C);
+  static const Color backgroundDarkPurple = Color(0xFF2C3E50);
+  static const Color surfaceDarkPurple = Color(0xFF34495E);
+  static const Color textPrimaryDarkPurple = Color(0xFFECF0F1);
+  static const Color textSecondaryDarkPurple = Color(0xFFBDC3C7);
+
+  // Green Theme Colors (Light)
+  static const Color primaryGreen = Color(0xFF27AE60);
+  static const Color secondaryGreen = Color(0xFF2ECC71);
+  static const Color backgroundLightGreen = Color(0xFFF8FFF8);
+  static const Color surfaceLightGreen = Color(0xFFE8F5E8);
+  static const Color textPrimaryLightGreen = Color(0xFF2C3E50);
+  static const Color textSecondaryLightGreen = Color(0xFF7F8C8D);
+
+  // Orange Theme Colors (Dark)
+  static const Color primaryOrange = Color(0xFFE67E22);
+  static const Color secondaryOrange = Color(0xFFD35400);
+  static const Color backgroundDarkOrange = Color(0xFF34495E);
+  static const Color surfaceDarkOrange = Color(0xFF2C3E50);
+  static const Color textPrimaryDarkOrange = Color(0xFFECF0F1);
+  static const Color textSecondaryDarkOrange = Color(0xFFBDC3C7);
+
+  // Blue Theme Colors (Light)
+  static const Color primaryBlue = Color(0xFF3498DB);
+  static const Color secondaryBlue = Color(0xFF2980B9);
+  static const Color backgroundLightBlue = Color(0xFFF8FBFF);
+  static const Color surfaceLightBlue = Color(0xFFE8F4FD);
+  static const Color textPrimaryLightBlue = Color(0xFF2C3E50);
+  static const Color textSecondaryLightBlue = Color(0xFF7F8C8D);
+
+  // Common Colors
   static const Color success = Color(0xFF28A745);
   static const Color warning = Color(0xFFFFC107);
   static const Color error = Color(0xFFDC3545);
   static const Color info = Color(0xFF17A2B8);
 
-  // Gradient Colors
-  static const LinearGradient primaryGradient = LinearGradient(
-    colors: [primary, primaryVariant],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
+  // Border Colors
+  static const Color borderDark = Color(0xFF333333);
+  static const Color borderLight = Color(0xFFDEE2E6);
 
-  static const LinearGradient storyGradient = LinearGradient(
-    colors: [
-      Color(0xFFFF0050),
-      Color(0xFFFF6B00),
-      Color(0xFFFFD600),
-      Color(0xFF00F2EA),
-    ],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
+  // Legacy colors for backward compatibility (will be dynamic based on theme)
+  static Color primary = primaryClassic;
+  static Color secondary = secondaryClassic;
+  static Color background = backgroundDarkClassic;
+  static Color surface = surfaceDarkClassic;
+  static Color surfaceVariant = surfaceDarkClassic;
+  static Color textPrimary = textPrimaryDarkClassic;
+  static Color textSecondary = textSecondaryDarkClassic;
+  static Color border = borderDark;
+
+  // Card colors
+  static const Color cardDark = Color(0xFF1E1E1E);
+  static const Color cardLight = Color(0xFFFFFFFF);
 }
 
 class AppTextStyles {
@@ -146,190 +177,222 @@ class AppTextStyles {
 }
 
 class AppTheme {
-  static ThemeData get darkTheme {
+  static ThemeData getThemeData(AppThemeType themeType) {
+    final themeColors = _getThemeColors(themeType);
+    final isDark = themeType.name.startsWith('dark');
+    
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.dark,
+      brightness: isDark ? Brightness.dark : Brightness.light,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primary,
-        brightness: Brightness.dark,
-        primary: AppColors.primary,
-        secondary: AppColors.secondary,
-        surface: AppColors.surfaceDark,
-        background: AppColors.backgroundDark,
-        onPrimary: Colors.white,
-        onSecondary: Colors.black,
-        onSurface: AppColors.textPrimaryDark,
-        onBackground: AppColors.textPrimaryDark,
+        seedColor: themeColors['primary']!,
+        brightness: isDark ? Brightness.dark : Brightness.light,
+        primary: themeColors['primary']!,
+        secondary: themeColors['secondary']!,
+        surface: themeColors['surface']!,
+        background: themeColors['background']!,
+        onPrimary: isDark ? Colors.white : Colors.black,
+        onSecondary: isDark ? Colors.white : Colors.black,
+        onSurface: themeColors['textPrimary']!,
+        onBackground: themeColors['textPrimary']!,
         error: AppColors.error,
       ),
-      scaffoldBackgroundColor: AppColors.backgroundDark,
+      scaffoldBackgroundColor: themeColors['background']!,
       textTheme: GoogleFonts.interTextTheme().apply(
-        bodyColor: AppColors.textPrimaryDark,
-        displayColor: AppColors.textPrimaryDark,
+        bodyColor: themeColors['textPrimary']!,
+        displayColor: themeColors['textPrimary']!,
       ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.surfaceDark,
-        foregroundColor: AppColors.textPrimaryDark,
+      appBarTheme: AppBarTheme(
+        backgroundColor: themeColors['surface']!,
+        foregroundColor: themeColors['textPrimary']!,
         elevation: 0,
         centerTitle: true,
       ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: AppColors.surfaceDark,
-        selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.textSecondaryDark,
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: themeColors['surface']!,
+        selectedItemColor: themeColors['primary']!,
+        unselectedItemColor: themeColors['textSecondary']!,
         type: BottomNavigationBarType.fixed,
-        elevation: 0,
+        elevation: isDark ? 0 : 8,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
+          backgroundColor: themeColors['primary']!,
+          foregroundColor: isDark ? Colors.white : Colors.black,
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
           ),
-          elevation: 0,
+          elevation: isDark ? 0 : 2,
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.primary,
+          foregroundColor: themeColors['primary']!,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surfaceVariantDark,
+        fillColor: themeColors['surface']!,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColors.borderDark),
+          borderSide: BorderSide(color: isDark ? AppColors.borderDark : AppColors.borderLight),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+          borderSide: BorderSide(color: themeColors['primary']!, width: 2),
         ),
-        hintStyle: const TextStyle(color: AppColors.textSecondaryDark),
-        labelStyle: const TextStyle(color: AppColors.textSecondaryDark),
+        hintStyle: TextStyle(color: themeColors['textSecondary']!),
+        labelStyle: TextStyle(color: themeColors['textSecondary']!),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       ),
       cardTheme: CardThemeData(
-        color: AppColors.cardDark,
+        color: isDark ? AppColors.cardDark : AppColors.cardLight,
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
       ),
       dialogTheme: DialogThemeData(
-        backgroundColor: AppColors.surfaceDark,
+        backgroundColor: themeColors['surface']!,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
       ),
-      drawerTheme: const DrawerThemeData(
-        backgroundColor: AppColors.surfaceDark,
+      drawerTheme: DrawerThemeData(
+        backgroundColor: themeColors['surface']!,
       ),
-      iconTheme: const IconThemeData(
-        color: AppColors.textPrimaryDark,
+      iconTheme: IconThemeData(
+        color: themeColors['textPrimary']!,
       ),
     );
   }
 
-  static ThemeData get lightTheme {
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.light,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primary,
-        brightness: Brightness.light,
-        primary: AppColors.primary,
-        secondary: AppColors.secondary,
-        surface: AppColors.surfaceLight,
-        background: AppColors.backgroundLight,
-        onPrimary: Colors.white,
-        onSecondary: Colors.black,
-        onSurface: AppColors.textPrimaryLight,
-        onBackground: AppColors.textPrimaryLight,
-        error: AppColors.error,
-      ),
-      scaffoldBackgroundColor: AppColors.backgroundLight,
-      textTheme: GoogleFonts.interTextTheme().apply(
-        bodyColor: AppColors.textPrimaryLight,
-        displayColor: AppColors.textPrimaryLight,
-      ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.surfaceLight,
-        foregroundColor: AppColors.textPrimaryLight,
-        elevation: 0,
-        centerTitle: true,
-      ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: AppColors.surfaceLight,
-        selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.textSecondaryLight,
-        type: BottomNavigationBarType.fixed,
-        elevation: 8,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
-          elevation: 2,
-        ),
-      ),
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          foregroundColor: AppColors.primary,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        ),
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: AppColors.surfaceVariantLight,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColors.borderLight),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
-        ),
-        hintStyle: const TextStyle(color: AppColors.textSecondaryLight),
-        labelStyle: const TextStyle(color: AppColors.textSecondaryLight),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      ),
-      cardTheme: CardThemeData(
-        color: AppColors.cardLight,
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-      dialogTheme: DialogThemeData(
-        backgroundColor: AppColors.surfaceLight,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-      ),
-      drawerTheme: const DrawerThemeData(
-        backgroundColor: AppColors.surfaceLight,
-      ),
-      iconTheme: const IconThemeData(
-        color: AppColors.textPrimaryLight,
-      ),
+  static Map<String, Color> _getThemeColors(AppThemeType themeType) {
+    switch (themeType) {
+      case AppThemeType.darkClassic:
+        return {
+          'primary': AppColors.primaryClassic,
+          'secondary': AppColors.secondaryClassic,
+          'background': AppColors.backgroundDarkClassic,
+          'surface': AppColors.surfaceDarkClassic,
+          'textPrimary': AppColors.textPrimaryDarkClassic,
+          'textSecondary': AppColors.textSecondaryDarkClassic,
+        };
+      case AppThemeType.lightClassic:
+        return {
+          'primary': AppColors.primaryClassic,
+          'secondary': AppColors.secondaryClassic,
+          'background': AppColors.backgroundLightClassic,
+          'surface': AppColors.surfaceLightClassic,
+          'textPrimary': AppColors.textPrimaryLightClassic,
+          'textSecondary': AppColors.textSecondaryLightClassic,
+        };
+      case AppThemeType.darkNeon:
+        return {
+          'primary': AppColors.primaryNeon,
+          'secondary': AppColors.secondaryNeon,
+          'background': AppColors.backgroundDarkNeon,
+          'surface': AppColors.surfaceDarkNeon,
+          'textPrimary': AppColors.textPrimaryDarkNeon,
+          'textSecondary': AppColors.textSecondaryDarkNeon,
+        };
+      case AppThemeType.lightPastel:
+        return {
+          'primary': AppColors.primaryPastel,
+          'secondary': AppColors.secondaryPastel,
+          'background': AppColors.backgroundLightPastel,
+          'surface': AppColors.surfaceLightPastel,
+          'textPrimary': AppColors.textPrimaryLightPastel,
+          'textSecondary': AppColors.textSecondaryLightPastel,
+        };
+      case AppThemeType.darkPurple:
+        return {
+          'primary': AppColors.primaryPurple,
+          'secondary': AppColors.secondaryPurple,
+          'background': AppColors.backgroundDarkPurple,
+          'surface': AppColors.surfaceDarkPurple,
+          'textPrimary': AppColors.textPrimaryDarkPurple,
+          'textSecondary': AppColors.textSecondaryDarkPurple,
+        };
+      case AppThemeType.lightGreen:
+        return {
+          'primary': AppColors.primaryGreen,
+          'secondary': AppColors.secondaryGreen,
+          'background': AppColors.backgroundLightGreen,
+          'surface': AppColors.surfaceLightGreen,
+          'textPrimary': AppColors.textPrimaryLightGreen,
+          'textSecondary': AppColors.textSecondaryLightGreen,
+        };
+      case AppThemeType.darkOrange:
+        return {
+          'primary': AppColors.primaryOrange,
+          'secondary': AppColors.secondaryOrange,
+          'background': AppColors.backgroundDarkOrange,
+          'surface': AppColors.surfaceDarkOrange,
+          'textPrimary': AppColors.textPrimaryDarkOrange,
+          'textSecondary': AppColors.textSecondaryDarkOrange,
+        };
+      case AppThemeType.lightBlue:
+        return {
+          'primary': AppColors.primaryBlue,
+          'secondary': AppColors.secondaryBlue,
+          'background': AppColors.backgroundLightBlue,
+          'surface': AppColors.surfaceLightBlue,
+          'textPrimary': AppColors.textPrimaryLightBlue,
+          'textSecondary': AppColors.textSecondaryLightBlue,
+        };
+    }
+  }
+
+  static LinearGradient getThemeGradient(AppThemeType themeType) {
+    final colors = _getThemeColors(themeType);
+    return LinearGradient(
+      colors: [colors['primary']!, colors['secondary']!],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
     );
+  }
+
+  static LinearGradient getStoryGradient(AppThemeType themeType) {
+    switch (themeType) {
+      case AppThemeType.darkNeon:
+        return const LinearGradient(
+          colors: [
+            Color(0xFF00FFFF),
+            Color(0xFF00FF80),
+            Color(0xFF80FF00),
+            Color(0xFFFF00FF),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+      case AppThemeType.lightPastel:
+        return const LinearGradient(
+          colors: [
+            Color(0xFFFF6B6B),
+            Color(0xFFFFE66D),
+            Color(0xFF4ECDC4),
+            Color(0xFF95E1D3),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+      default:
+        return LinearGradient(
+          colors: [
+            _getThemeColors(themeType)['primary']!,
+            _getThemeColors(themeType)['secondary']!,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+    }
   }
 }
 
@@ -339,22 +402,10 @@ extension ThemeExtension on BuildContext {
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
   TextTheme get textTheme => Theme.of(this).textTheme;
   
-  Color get primaryBackground => theme.brightness == Brightness.dark 
-      ? AppColors.backgroundDark 
-      : AppColors.backgroundLight;
-      
-  Color get primarySurface => theme.brightness == Brightness.dark 
-      ? AppColors.surfaceDark 
-      : AppColors.surfaceLight;
-      
-  Color get primaryText => theme.brightness == Brightness.dark 
-      ? AppColors.textPrimaryDark 
-      : AppColors.textPrimaryLight;
-      
-  Color get secondaryText => theme.brightness == Brightness.dark 
-      ? AppColors.textSecondaryDark 
-      : AppColors.textSecondaryLight;
-      
+  Color get primaryBackground => colorScheme.background;
+  Color get primarySurface => colorScheme.surface;
+  Color get primaryText => colorScheme.onBackground;
+  Color get secondaryText => colorScheme.onSurface.withOpacity(0.7);
   Color get primaryBorder => theme.brightness == Brightness.dark 
       ? AppColors.borderDark 
       : AppColors.borderLight;
