@@ -18,10 +18,10 @@ void main() {
   
   // Set system UI overlay style (status bar, navigation bar)
   SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
+    SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: AppColors.backgroundDark,
+      systemNavigationBarColor: Colors.black,
       systemNavigationBarIconBrightness: Brightness.light,
     ),
   );
@@ -61,8 +61,8 @@ class TikTokCloneApp extends StatelessWidget {
                   ? Brightness.light 
                   : Brightness.dark,
               systemNavigationBarColor: themeProvider.isDarkMode 
-                  ? AppColors.backgroundDark 
-                  : AppColors.backgroundLight,
+                  ? const Color(0xFF000000)
+                  : const Color(0xFFFFFFFF),
               systemNavigationBarIconBrightness: themeProvider.isDarkMode 
                   ? Brightness.light 
                   : Brightness.dark,
@@ -72,9 +72,7 @@ class TikTokCloneApp extends StatelessWidget {
           return MaterialApp(
             title: 'TikTok Clone',
             debugShowCheckedModeBanner: false,
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
-            themeMode: themeProvider.themeMode,
+            theme: AppTheme.getThemeData(themeProvider.currentTheme),
             home: const SplashScreen(),
           );
         },
