@@ -9,6 +9,7 @@ class StorySticker {
   final double width;
   final double height;
   final double rotation;
+  final bool isDraggable;
 
   StorySticker({
     required this.type,
@@ -18,7 +19,30 @@ class StorySticker {
     required this.width,
     required this.height,
     this.rotation = 0.0,
+    this.isDraggable = true,
   });
+
+  StorySticker copyWith({
+    String? type,
+    String? url,
+    double? x,
+    double? y,
+    double? width,
+    double? height,
+    double? rotation,
+    bool? isDraggable,
+  }) {
+    return StorySticker(
+      type: type ?? this.type,
+      url: url ?? this.url,
+      x: x ?? this.x,
+      y: y ?? this.y,
+      width: width ?? this.width,
+      height: height ?? this.height,
+      rotation: rotation ?? this.rotation,
+      isDraggable: isDraggable ?? this.isDraggable,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -29,6 +53,7 @@ class StorySticker {
       'width': width,
       'height': height,
       'rotation': rotation,
+      'isDraggable': isDraggable,
     };
   }
 
@@ -41,6 +66,77 @@ class StorySticker {
       width: map['width']?.toDouble() ?? 0.0,
       height: map['height']?.toDouble() ?? 0.0,
       rotation: map['rotation']?.toDouble() ?? 0.0,
+      isDraggable: map['isDraggable'] ?? true,
+    );
+  }
+}
+
+class StoryTextElement {
+  final String text;
+  final double x;
+  final double y;
+  final double fontSize;
+  final String color;
+  final String fontFamily;
+  final double rotation;
+  final bool isDraggable;
+
+  StoryTextElement({
+    required this.text,
+    required this.x,
+    required this.y,
+    this.fontSize = 24.0,
+    this.color = '#FFFFFF',
+    this.fontFamily = 'Inter',
+    this.rotation = 0.0,
+    this.isDraggable = true,
+  });
+
+  StoryTextElement copyWith({
+    String? text,
+    double? x,
+    double? y,
+    double? fontSize,
+    String? color,
+    String? fontFamily,
+    double? rotation,
+    bool? isDraggable,
+  }) {
+    return StoryTextElement(
+      text: text ?? this.text,
+      x: x ?? this.x,
+      y: y ?? this.y,
+      fontSize: fontSize ?? this.fontSize,
+      color: color ?? this.color,
+      fontFamily: fontFamily ?? this.fontFamily,
+      rotation: rotation ?? this.rotation,
+      isDraggable: isDraggable ?? this.isDraggable,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'text': text,
+      'x': x,
+      'y': y,
+      'fontSize': fontSize,
+      'color': color,
+      'fontFamily': fontFamily,
+      'rotation': rotation,
+      'isDraggable': isDraggable,
+    };
+  }
+
+  factory StoryTextElement.fromMap(Map<String, dynamic> map) {
+    return StoryTextElement(
+      text: map['text'] ?? '',
+      x: map['x']?.toDouble() ?? 0.0,
+      y: map['y']?.toDouble() ?? 0.0,
+      fontSize: map['fontSize']?.toDouble() ?? 24.0,
+      color: map['color'] ?? '#FFFFFF',
+      fontFamily: map['fontFamily'] ?? 'Inter',
+      rotation: map['rotation']?.toDouble() ?? 0.0,
+      isDraggable: map['isDraggable'] ?? true,
     );
   }
 }
@@ -157,15 +253,119 @@ class StoryReply {
   }
 }
 
+class StoryLayoutElement {
+  final String type; // 'text', 'sticker', 'media'
+  final String id;
+  final double x;
+  final double y;
+  final double width;
+  final double height;
+  final double rotation;
+  final int zIndex;
+
+  StoryLayoutElement({
+    required this.type,
+    required this.id,
+    required this.x,
+    required this.y,
+    required this.width,
+    required this.height,
+    this.rotation = 0.0,
+    this.zIndex = 0,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'type': type,
+      'id': id,
+      'x': x,
+      'y': y,
+      'width': width,
+      'height': height,
+      'rotation': rotation,
+      'zIndex': zIndex,
+    };
+  }
+
+  factory StoryLayoutElement.fromMap(Map<String, dynamic> map) {
+    return StoryLayoutElement(
+      type: map['type'] ?? '',
+      id: map['id'] ?? '',
+      x: map['x']?.toDouble() ?? 0.0,
+      y: map['y']?.toDouble() ?? 0.0,
+      width: map['width']?.toDouble() ?? 0.0,
+      height: map['height']?.toDouble() ?? 0.0,
+      rotation: map['rotation']?.toDouble() ?? 0.0,
+      zIndex: map['zIndex']?.toInt() ?? 0,
+    );
+  }
+}
+
+class StoryLayout {
+  final List<StoryLayoutElement> elements;
+
+  StoryLayout({
+    this.elements = const [],
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'elements': elements.map((x) => x.toMap()).toList(),
+    };
+  }
+
+  factory StoryLayout.fromMap(Map<String, dynamic> map) {
+    return StoryLayout(
+      elements: List<StoryLayoutElement>.from(
+        map['elements']?.map((x) => StoryLayoutElement.fromMap(x)) ?? []
+      ),
+    );
+  }
+}
+
+class StoryMention {
+  final String userId;
+  final String username;
+  final double x;
+  final double y;
+
+  StoryMention({
+    required this.userId,
+    required this.username,
+    required this.x,
+    required this.y,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'userId': userId,
+      'username': username,
+      'x': x,
+      'y': y,
+    };
+  }
+
+  factory StoryMention.fromMap(Map<String, dynamic> map) {
+    return StoryMention(
+      userId: map['userId'] ?? '',
+      username: map['username'] ?? '',
+      x: map['x']?.toDouble() ?? 0.0,
+      y: map['y']?.toDouble() ?? 0.0,
+    );
+  }
+}
+
 class StoryModel {
   final String id;
   final UserModel creator;
   final String content; // 'photo', 'video', 'text'
   final String mediaUrl;
+  final String thumbnailUrl;
   final String text;
   final String textColor;
   final String backgroundColor;
   final List<StorySticker> stickers;
+  final List<StoryTextElement> textElements;
   final StoryMusic? music;
   final int duration;
   final DateTime expiresAt;
@@ -176,6 +376,9 @@ class StoryModel {
   final String highlightTitle;
   final List<StoryReaction> reactions;
   final List<StoryReply> replies;
+  final List<String> hashtags;
+  final List<StoryMention> mentions;
+  final StoryLayout layout;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -184,10 +387,12 @@ class StoryModel {
     required this.creator,
     required this.content,
     this.mediaUrl = '',
+    this.thumbnailUrl = '',
     this.text = '',
     this.textColor = '#FFFFFF',
     this.backgroundColor = '#000000',
     this.stickers = const [],
+    this.textElements = const [],
     this.music,
     this.duration = 86400000, // 24 hours in milliseconds
     required this.expiresAt,
@@ -198,6 +403,9 @@ class StoryModel {
     this.highlightTitle = '',
     this.reactions = const [],
     this.replies = const [],
+    this.hashtags = const [],
+    this.mentions = const [],
+    required this.layout,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -207,10 +415,12 @@ class StoryModel {
     UserModel? creator,
     String? content,
     String? mediaUrl,
+    String? thumbnailUrl,
     String? text,
     String? textColor,
     String? backgroundColor,
     List<StorySticker>? stickers,
+    List<StoryTextElement>? textElements,
     StoryMusic? music,
     int? duration,
     DateTime? expiresAt,
@@ -221,6 +431,9 @@ class StoryModel {
     String? highlightTitle,
     List<StoryReaction>? reactions,
     List<StoryReply>? replies,
+    List<String>? hashtags,
+    List<StoryMention>? mentions,
+    StoryLayout? layout,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -229,10 +442,12 @@ class StoryModel {
       creator: creator ?? this.creator,
       content: content ?? this.content,
       mediaUrl: mediaUrl ?? this.mediaUrl,
+      thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
       text: text ?? this.text,
       textColor: textColor ?? this.textColor,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       stickers: stickers ?? this.stickers,
+      textElements: textElements ?? this.textElements,
       music: music ?? this.music,
       duration: duration ?? this.duration,
       expiresAt: expiresAt ?? this.expiresAt,
@@ -243,6 +458,9 @@ class StoryModel {
       highlightTitle: highlightTitle ?? this.highlightTitle,
       reactions: reactions ?? this.reactions,
       replies: replies ?? this.replies,
+      hashtags: hashtags ?? this.hashtags,
+      mentions: mentions ?? this.mentions,
+      layout: layout ?? this.layout,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -254,10 +472,12 @@ class StoryModel {
       'creator': creator.toMap(),
       'content': content,
       'mediaUrl': mediaUrl,
+      'thumbnailUrl': thumbnailUrl,
       'text': text,
       'textColor': textColor,
       'backgroundColor': backgroundColor,
       'stickers': stickers.map((x) => x.toMap()).toList(),
+      'textElements': textElements.map((x) => x.toMap()).toList(),
       'music': music?.toMap(),
       'duration': duration,
       'expiresAt': expiresAt.toIso8601String(),
@@ -268,6 +488,9 @@ class StoryModel {
       'highlightTitle': highlightTitle,
       'reactions': reactions.map((x) => x.toMap()).toList(),
       'replies': replies.map((x) => x.toMap()).toList(),
+      'hashtags': hashtags,
+      'mentions': mentions.map((x) => x.toMap()).toList(),
+      'layout': layout.toMap(),
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
     };
@@ -279,11 +502,15 @@ class StoryModel {
       creator: UserModel.fromMap(map['creator'] ?? {}),
       content: map['content'] ?? 'text',
       mediaUrl: map['mediaUrl'] ?? '',
+      thumbnailUrl: map['thumbnailUrl'] ?? '',
       text: map['text'] ?? '',
       textColor: map['textColor'] ?? '#FFFFFF',
       backgroundColor: map['backgroundColor'] ?? '#000000',
       stickers: List<StorySticker>.from(
         map['stickers']?.map((x) => StorySticker.fromMap(x)) ?? []
+      ),
+      textElements: List<StoryTextElement>.from(
+        map['textElements']?.map((x) => StoryTextElement.fromMap(x)) ?? []
       ),
       music: map['music'] != null ? StoryMusic.fromMap(map['music']) : null,
       duration: map['duration']?.toInt() ?? 86400000,
@@ -301,6 +528,13 @@ class StoryModel {
       replies: List<StoryReply>.from(
         map['replies']?.map((x) => StoryReply.fromMap(x)) ?? []
       ),
+      hashtags: List<String>.from(map['hashtags'] ?? []),
+      mentions: List<StoryMention>.from(
+        map['mentions']?.map((x) => StoryMention.fromMap(x)) ?? []
+      ),
+      layout: map['layout'] != null 
+          ? StoryLayout.fromMap(map['layout']) 
+          : StoryLayout(),
       createdAt: DateTime.parse(map['createdAt'] ?? DateTime.now().toIso8601String()),
       updatedAt: DateTime.parse(map['updatedAt'] ?? DateTime.now().toIso8601String()),
     );
@@ -315,6 +549,13 @@ class StoryModel {
     return mediaUrl.startsWith('http') 
         ? mediaUrl 
         : 'http://localhost:3001$mediaUrl';
+  }
+
+  String get thumbnailUrlFull {
+    if (thumbnailUrl.isEmpty) return '';
+    return thumbnailUrl.startsWith('http') 
+        ? thumbnailUrl 
+        : 'http://localhost:3001$thumbnailUrl';
   }
 
   bool get isExpired {
