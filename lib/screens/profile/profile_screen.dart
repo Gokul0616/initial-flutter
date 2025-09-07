@@ -165,7 +165,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: AppColors.primary,
+                    color: context.colorScheme.primary,
                     width: 2,
                   ),
                 ),
