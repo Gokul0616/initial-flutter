@@ -434,6 +434,190 @@ router.post('/:messageId/react', auth, async (req, res) => {
   }
 });
 
+// Edit message (within 3 hours)
+router.put('/:messageId/edit', auth, async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    const { text } = req.body;
+    const userId = req.user._id;
+
+    if (!text || text.trim().length === 0) {
+      return res.status(400).json({ error: 'Message text is required' });
+    }
+
+    const message = await Message.findById(messageId);
+    if (!message) {
+      return res.status(404).json({ error: 'Message not found' });
+    }
+
+    // Check if user is the sender
+    if (message.sender.toString() !== userId.toString()) {
+      return res.status(403).json({ error: 'Only sender can edit message' });
+    }
+
+    // Check if message is text type
+    if (message.messageType !== 'text') {
+      return res.status(400).json({ error: 'Only text messages can be edited' });
+    }
+
+    // Check if message is within 3-hour edit window
+    const threeHoursAgo = new Date(Date.now() - 3 * 60 * 60 * 1000);
+    if (message.createdAt < threeHoursAgo) {
+      return res.status(400).json({ error: 'Message can only be edited within 3 hours' });
+    }
+
+    // Save original text to edit history
+    if (!message.isEdited) {
+      message.editHistory.push({
+        text: message.text,
+        editedAt: message.createdAt
+      });
+    }
+
+    // Update message
+    message.editHistory.push({
+      text: message.text,
+      editedAt: new Date()
+    });
+    message.text = text.trim();
+    message.isEdited = true;
+    message.editedAt = new Date();
+
+    await message.save();
+    await message.populate('sender', 'username displayName profilePicture isVerified');
+    await message.populate('recipient', 'username displayName profilePicture isVerified');
+
+    // Emit real-time edit
+    const recipientId = message.recipient.toString();
+    req.app.get('io').emit('message_edited', {
+      recipientId,
+      message: message.toMessageJSON()
+    });
+
+    res.json({
+      message: 'Message edited successfully',
+      data: message.toMessageJSON()
+    });
+
+  } catch (error) {
+    console.error('Edit message error:', error);
+    res.status(500).json({ error: 'Server error editing message' });
+  }
+});
+
+// Update message position (for drag functionality)
+router.put('/:messageId/position', auth, async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    const { x, y } = req.body;
+    const userId = req.user._id;
+
+    const message = await Message.findById(messageId);
+    if (!message) {
+      return res.status(404).json({ error: 'Message not found' });
+    }
+
+    // Check if user is part of the conversation
+    if (message.sender.toString() !== userId.toString() && 
+        message.recipient.toString() !== userId.toString()) {
+      return res.status(403).json({ error: 'Not authorized' });
+    }
+
+    message.position = { x, y };
+    await message.save();
+
+    res.json({ message: 'Message position updated successfully' });
+
+  } catch (error) {
+    console.error('Update message position error:', error);
+    res.status(500).json({ error: 'Server error updating message position' });
+  }
+});
+
+// Send voice note
+router.post('/send-voice', auth, upload.single('voice'), async (req, res) => {
+  try {
+    const { recipientId, duration, visualData } = req.body;
+    const senderId = req.user._id;
+    const voiceFile = req.file;
+
+    if (!recipientId) {
+      return res.status(400).json({ error: 'Recipient is required' });
+    }
+
+    if (!voiceFile) {
+      return res.status(400).json({ error: 'Voice file is required' });
+    }
+
+    // Check if recipient exists
+    const recipient = await User.findById(recipientId);
+    if (!recipient) {
+      return res.status(404).json({ error: 'Recipient not found' });
+    }
+
+    const messageData = {
+      sender: senderId,
+      recipient: recipientId,
+      messageType: 'audio',
+      voiceNote: {
+        url: `/uploads/messages/${voiceFile.filename}`,
+        duration: parseInt(duration) || 0,
+        visualData: visualData ? JSON.parse(visualData) : []
+      }
+    };
+
+    const message = new Message(messageData);
+    await message.save();
+    await message.populate('sender', 'username displayName profilePicture isVerified');
+    await message.populate('recipient', 'username displayName profilePicture isVerified');
+
+    // Emit real-time message
+    req.app.get('io').emit('new_message', {
+      recipientId,
+      message: message.toMessageJSON()
+    });
+
+    res.status(201).json({
+      message: 'Voice message sent successfully',
+      data: message.toMessageJSON()
+    });
+
+  } catch (error) {
+    console.error('Send voice message error:', error);
+    res.status(500).json({ error: 'Server error sending voice message' });
+  }
+});
+
+// Get message edit history
+router.get('/:messageId/history', auth, async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    const userId = req.user._id;
+
+    const message = await Message.findById(messageId);
+    if (!message) {
+      return res.status(404).json({ error: 'Message not found' });
+    }
+
+    // Check if user is part of the conversation
+    if (message.sender.toString() !== userId.toString() && 
+        message.recipient.toString() !== userId.toString()) {
+      return res.status(403).json({ error: 'Not authorized' });
+    }
+
+    res.json({
+      editHistory: message.editHistory,
+      currentText: message.text,
+      isEdited: message.isEdited,
+      editedAt: message.editedAt
+    });
+
+  } catch (error) {
+    console.error('Get message history error:', error);
+    res.status(500).json({ error: 'Server error fetching message history' });
+  }
+});
+
 // Delete message
 router.delete('/:messageId', auth, async (req, res) => {
   try {
@@ -447,16 +631,17 @@ router.delete('/:messageId', auth, async (req, res) => {
     }
 
     // Check if user is part of the conversation
-    if (message.sender !== userId && message.recipient !== userId) {
+    if (message.sender.toString() !== userId.toString() && 
+        message.recipient.toString() !== userId.toString()) {
       return res.status(403).json({ error: 'Not authorized' });
     }
 
-    if (deleteFor === 'everyone' && message.sender === userId) {
+    if (deleteFor === 'everyone' && message.sender.toString() === userId.toString()) {
       // Delete for everyone (only sender can do this)
       message.isDeleted = true;
     } else {
       // Delete for me only
-      const existingDelete = message.deletedFor.find(d => d.userId === userId);
+      const existingDelete = message.deletedFor.find(d => d.userId.toString() === userId.toString());
       if (!existingDelete) {
         message.deletedFor.push({ userId });
       }
@@ -466,7 +651,8 @@ router.delete('/:messageId', auth, async (req, res) => {
 
     // Emit real-time delete
     if (deleteFor === 'everyone') {
-      const recipientId = message.sender === userId ? message.recipient : message.sender;
+      const recipientId = message.sender.toString() === userId.toString() ? 
+                          message.recipient : message.sender;
       req.app.get('io').emit('message_deleted', {
         recipientId,
         messageId,
