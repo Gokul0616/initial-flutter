@@ -31,6 +31,10 @@ const storySchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  thumbnailUrl: {
+    type: String,
+    default: ''
+  },
   text: {
     type: String,
     default: '',
@@ -44,6 +48,7 @@ const storySchema = new mongoose.Schema({
     type: String,
     default: '#000000'
   },
+  // Draggable stickers and elements
   stickers: [{
     type: String,
     url: String,
@@ -51,7 +56,25 @@ const storySchema = new mongoose.Schema({
     y: Number,
     width: Number,
     height: Number,
-    rotation: Number
+    rotation: Number,
+    isDraggable: {
+      type: Boolean,
+      default: true
+    }
+  }],
+  // Text elements that can be dragged
+  textElements: [{
+    text: String,
+    x: Number,
+    y: Number,
+    fontSize: Number,
+    color: String,
+    fontFamily: String,
+    rotation: Number,
+    isDraggable: {
+      type: Boolean,
+      default: true
+    }
   }],
   music: {
     title: String,
@@ -106,6 +129,27 @@ const storySchema = new mongoose.Schema({
       default: Date.now
     }
   }],
+  // TikTok-like features
+  hashtags: [String],
+  mentions: [{
+    userId: String,
+    username: String,
+    x: Number,
+    y: Number
+  }],
+  // Story layout position for draggable functionality
+  layout: {
+    elements: [{
+      type: String, // 'text', 'sticker', 'media'
+      id: String,
+      x: Number,
+      y: Number,
+      width: Number,
+      height: Number,
+      rotation: Number,
+      zIndex: Number
+    }]
+  },
   isDeleted: {
     type: Boolean,
     default: false
@@ -129,10 +173,12 @@ storySchema.methods.toStoryJSON = function() {
     creator: this.creator,
     content: this.content,
     mediaUrl: this.mediaUrl,
+    thumbnailUrl: this.thumbnailUrl,
     text: this.text,
     textColor: this.textColor,
     backgroundColor: this.backgroundColor,
     stickers: this.stickers,
+    textElements: this.textElements,
     music: this.music,
     duration: this.duration,
     expiresAt: this.expiresAt,
@@ -143,6 +189,9 @@ storySchema.methods.toStoryJSON = function() {
     highlightTitle: this.highlightTitle,
     reactions: this.reactions,
     replies: this.replies,
+    hashtags: this.hashtags,
+    mentions: this.mentions,
+    layout: this.layout,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt
   };

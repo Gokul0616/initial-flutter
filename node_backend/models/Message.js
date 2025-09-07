@@ -23,7 +23,7 @@ const messageSchema = new mongoose.Schema({
   },
   messageType: {
     type: String,
-    enum: ['text', 'image', 'video', 'audio', 'story_reply', 'media_group'],
+    enum: ['text', 'image', 'video', 'audio', 'story_reply', 'media_group', 'sticker', 'gif'],
     default: 'text'
   },
   // Media attachments
@@ -31,7 +31,7 @@ const messageSchema = new mongoose.Schema({
     url: String,
     type: {
       type: String,
-      enum: ['image', 'video', 'audio', 'file']
+      enum: ['image', 'video', 'audio', 'file', 'gif', 'sticker']
     },
     filename: String,
     size: Number,
@@ -69,7 +69,14 @@ const messageSchema = new mongoose.Schema({
   replyTo: {
     messageId: String,
     text: String,
-    senderName: String
+    senderName: String,
+    mediaUrl: String,
+    messageType: String
+  },
+  // For drag and drop functionality
+  position: {
+    x: Number,
+    y: Number
   },
   isRead: {
     type: Boolean,
@@ -98,6 +105,37 @@ const messageSchema = new mongoose.Schema({
     type: String,
     enum: ['sending', 'sent', 'delivered', 'read'],
     default: 'sent'
+  },
+  // Edit functionality
+  isEdited: {
+    type: Boolean,
+    default: false
+  },
+  editedAt: {
+    type: Date
+  },
+  editHistory: [{
+    text: String,
+    editedAt: {
+      type: Date,
+      default: Date.now
+    }
+  }],
+  // TikTok-like features
+  mentions: [{
+    userId: String,
+    username: String,
+    position: {
+      start: Number,
+      end: Number
+    }
+  }],
+  hashtags: [String],
+  // Voice message features
+  voiceNote: {
+    url: String,
+    duration: Number,
+    visualData: [Number] // Waveform data
   }
 }, {
   timestamps: true
@@ -108,6 +146,12 @@ messageSchema.index({ sender: 1, recipient: 1, createdAt: -1 });
 messageSchema.index({ recipient: 1, isRead: 1 });
 messageSchema.index({ createdAt: -1 });
 messageSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+
+// Check if message is editable (within 3 hours)
+messageSchema.methods.isEditable = function() {
+  const threeHoursAgo = new Date(Date.now() - 3 * 60 * 60 * 1000);
+  return this.createdAt > threeHoursAgo && !this.isDeleted;
+};
 
 // Generate message response JSON
 messageSchema.methods.toMessageJSON = function() {
@@ -122,10 +166,18 @@ messageSchema.methods.toMessageJSON = function() {
     storyReply: this.storyReply,
     reactions: this.reactions,
     replyTo: this.replyTo,
+    position: this.position,
     isRead: this.isRead,
     readAt: this.readAt,
     status: this.status,
     expiresAt: this.expiresAt,
+    isEdited: this.isEdited,
+    editedAt: this.editedAt,
+    editHistory: this.editHistory,
+    mentions: this.mentions,
+    hashtags: this.hashtags,
+    voiceNote: this.voiceNote,
+    isEditable: this.isEditable(),
     createdAt: this.createdAt,
     updatedAt: this.updatedAt
   };
@@ -145,6 +197,9 @@ messageSchema.methods.getPreviewText = function() {
   if (this.messageType === 'audio') return '🎵 Audio';
   if (this.messageType === 'story_reply') return '💬 Replied to story';
   if (this.messageType === 'media_group') return `📷 ${this.mediaGroup.length} photos`;
+  if (this.messageType === 'sticker') return '🎭 Sticker';
+  if (this.messageType === 'gif') return '🎬 GIF';
+  if (this.voiceNote) return '🎤 Voice message';
   return 'Message';
 };
 
