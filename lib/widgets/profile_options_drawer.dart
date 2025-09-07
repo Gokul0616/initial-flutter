@@ -65,15 +65,12 @@ class ProfileOptionsDrawer extends StatelessWidget {
                   builder: (context, themeProvider, child) {
                     return _buildOptionTile(
                       context,
-                      icon: themeProvider.isDarkMode 
-                          ? Icons.light_mode 
-                          : Icons.dark_mode,
-                      title: themeProvider.isDarkMode 
-                          ? 'Light Mode' 
-                          : 'Dark Mode',
-                      subtitle: 'Change app appearance',
+                      icon: Icons.palette,
+                      title: 'Theme Settings',
+                      subtitle: 'Current: ${themeProvider.themeName}',
                       onTap: () {
-                        themeProvider.toggleTheme();
+                        Navigator.pop(context);
+                        _showThemeSelector(context);
                       },
                     );
                   },
