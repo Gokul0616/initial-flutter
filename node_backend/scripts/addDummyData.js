@@ -214,21 +214,7 @@ async function addDummyData() {
             emoji: '🔥'
           }
         ],
-        hashtags: ['#video', '#content', '#tiktok'],
-        layout: {
-          elements: [
-            {
-              type: 'text',
-              id: uuidv4(),
-              x: 50,
-              y: 100,
-              width: 200,
-              height: 50,
-              rotation: 0,
-              zIndex: 1
-            }
-          ]
-        }
+        hashtags: ['#video', '#content', '#tiktok']
       });
       
       await story.save();
